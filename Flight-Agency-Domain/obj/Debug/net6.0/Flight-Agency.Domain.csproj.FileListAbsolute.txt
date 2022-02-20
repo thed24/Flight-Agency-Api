@@ -1,0 +1,12 @@
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Domain.deps.json
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Domain.dll
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\ref\Flight-Agency.Domain.dll
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Domain.pdb
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.csproj.AssemblyReference.cache
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.GeneratedMSBuildEditorConfig.editorconfig
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.AssemblyInfoInputs.cache
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.AssemblyInfo.cs
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.csproj.CoreCompileInputs.cache
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.dll
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\ref\Flight-Agency.Domain.dll
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Domain\obj\Debug\net6.0\Flight-Agency.Domain.pdb
