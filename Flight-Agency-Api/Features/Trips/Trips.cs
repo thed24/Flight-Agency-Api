@@ -41,7 +41,7 @@ public class Trips
 
     [FunctionName("UpdateTrip")]
     public async Task<IActionResult> UpdateTrip(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "{userId}/trips")]
+    [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{userId}/trips")]
         HttpRequest req,
         int userId,
         ILogger log)

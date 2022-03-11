@@ -27,7 +27,7 @@ public class Places
         var placesNearByRequest = Mapper.MapQueryParamsToObject<PlacesNearByRequest>(req.Query);
         if (placesNearByRequest is null) return new BadRequestResult();
 
-        placesNearByRequest.ApiKey = "";
+        placesNearByRequest.ApiKey = Environment.GetEnvironmentVariable("API_KEY");
         PlacesNearByResponse placesNearBy = await GoogleMaps.PlacesNearBy.QueryAsync(placesNearByRequest);
         return new OkObjectResult(placesNearBy);
     }
