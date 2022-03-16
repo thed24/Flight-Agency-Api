@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS installer-env
 
 COPY . /src/dotnet-function-app
-RUN cd /src/dotnet-function-app && \
+RUN cd /src/dotnet-function-app/Flight-Agency-Api/ && \
     mkdir -p /home/site/wwwroot && \
     dotnet publish *.csproj --output /home/site/wwwroot
 
