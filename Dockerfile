@@ -1,5 +1,4 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS installer-env
-
 COPY . /src/dotnet-function-app
 RUN cd /src/dotnet-function-app/Flight-Agency-Api/ && \
     mkdir -p /home/site/wwwroot && \
@@ -11,3 +10,4 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     ASPNETCORE_URLS=http://+:8080
 
 COPY --from=installer-env ["/home/site/wwwroot", "/home/site/wwwroot"]
+ENTRYPOINT ["dotnet", "Flight-Agency-Api.dll"]
