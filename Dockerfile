@@ -9,5 +9,5 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true \
     ASPNETCORE_URLS=http://+:8080
 
-COPY --from=installer-env ["/home/site/wwwroot", "/home/site/wwwroot"]
+COPY --from=installer-env "/home/site/wwwroot" .
 ENTRYPOINT ["dotnet", "Flight-Agency-Api.dll"]
