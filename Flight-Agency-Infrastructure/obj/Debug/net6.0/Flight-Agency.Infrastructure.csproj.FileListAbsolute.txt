@@ -2,6 +2,7 @@ S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Fl
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\ref\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Infrastructure.pdb
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Infrastructure.runtimeconfig.json
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.csproj.AssemblyReference.cache
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.AssemblyInfoInputs.cache
@@ -10,10 +11,9 @@ S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\ob
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\ref\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.pdb
+S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.genruntimeconfig.cache
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\bin\Debug\net6.0\Flight-Agency.Infrastructure.deps.json
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\bin\Debug\net6.0\Flight-Agency.Infrastructure.runtimeconfig.json
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\bin\Debug\net6.0\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\bin\Debug\net6.0\ref\Flight-Agency.Infrastructure.dll
 S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\bin\Debug\net6.0\Flight-Agency.Infrastructure.pdb
-S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Infrastructure\obj\Debug\net6.0\Flight-Agency.Infrastructure.genruntimeconfig.cache
-S:\Projects\Personal\Flight-Agency\Flight-Agency\Flight-Agency-Api\bin\output\Flight-Agency.Infrastructure.runtimeconfig.json

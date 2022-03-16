@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flight_Agency_Infrastructure.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20220312111957_RefactorTrip")]
+    partial class RefactorTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
@@ -70,16 +72,11 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.Property<int>("TimeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("TripId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
                     b.HasIndex("TimeId");
-
-                    b.HasIndex("TripId");
 
                     b.ToTable("Stops");
                 });
@@ -94,12 +91,7 @@ namespace Flight_Agency_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Trips");
                 });
@@ -122,7 +114,12 @@ namespace Flight_Agency_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TripId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TripId");
 
                     b.ToTable("Users");
                 });
@@ -141,30 +138,18 @@ namespace Flight_Agency_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Flight_Agency_Domain.Trip", null)
-                        .WithMany("Stops")
-                        .HasForeignKey("TripId");
-
                     b.Navigation("Location");
 
                     b.Navigation("Time");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Trip", b =>
-                {
-                    b.HasOne("Flight_Agency_Domain.User", null)
-                        .WithMany("Trips")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Flight_Agency_Domain.Trip", b =>
-                {
-                    b.Navigation("Stops");
-                });
-
             modelBuilder.Entity("Flight_Agency_Domain.User", b =>
                 {
-                    b.Navigation("Trips");
+                    b.HasOne("Flight_Agency_Domain.Trip", "Trip")
+                        .WithMany()
+                        .HasForeignKey("TripId");
+
+                    b.Navigation("Trip");
                 });
 #pragma warning restore 612, 618
         }

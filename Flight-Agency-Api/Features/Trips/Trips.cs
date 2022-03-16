@@ -1,18 +1,12 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Flight_Agency_Api.Features.Authorization.Services;
 using Flight_Agency_Infrastructure.Common;
 using Flight_Agency_Domain;
-using GoogleMapsApi.Entities.PlacesNearBy.Request;
-using GoogleMapsApi;
-using GoogleMapsApi.Entities.PlacesNearBy.Response;
 
 namespace Flight_Agency_Api;
 
@@ -37,6 +31,17 @@ public class Trips
 
         var trip = await TripService.CreateTrip(userId, createTripRequest);
         return new OkObjectResult(trip);
+    }
+
+    [FunctionName("GetTrips")]
+    public async Task<IActionResult> GetTrips(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/trips")]
+        HttpRequest req,
+        int userId,
+        ILogger log)
+    {
+        var trips = await TripService.GetTrips(userId);
+        return new OkObjectResult(trips);
     }
 
     [FunctionName("UpdateTrip")]

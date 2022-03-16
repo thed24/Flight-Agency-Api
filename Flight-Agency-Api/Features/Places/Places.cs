@@ -13,11 +13,20 @@ using Flight_Agency_Domain;
 using GoogleMapsApi.Entities.PlacesNearBy.Request;
 using GoogleMapsApi;
 using GoogleMapsApi.Entities.PlacesNearBy.Response;
+using Google.Cloud.SecretManager.V1;
 
 namespace Flight_Agency_Api;
 
 public class Places
 {
+    private string key;
+    public Places()
+    {
+        var client = SecretManagerServiceClient.Create();
+        var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
+        key = result.Payload.Data.ToStringUtf8();
+    }
+
     [FunctionName("PlacesNearBy")]
     public async Task<IActionResult> GetPlaces(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "places/nearBy")]
@@ -27,7 +36,7 @@ public class Places
         var placesNearByRequest = Mapper.MapQueryParamsToObject<PlacesNearByRequest>(req.Query);
         if (placesNearByRequest is null) return new BadRequestResult();
 
-        placesNearByRequest.ApiKey = Environment.GetEnvironmentVariable("API_KEY");
+        placesNearByRequest.ApiKey = key;
         PlacesNearByResponse placesNearBy = await GoogleMaps.PlacesNearBy.QueryAsync(placesNearByRequest);
         return new OkObjectResult(placesNearBy);
     }

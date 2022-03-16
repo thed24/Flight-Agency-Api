@@ -1,4 +1,5 @@
 ﻿using Flight_Agency_Api.Features.Authorization.Services;
+using Google.Cloud.SecretManager.V1;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 

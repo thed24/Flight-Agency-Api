@@ -1,4 +1,5 @@
 ﻿using Flight_Agency_Domain;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Flight_Agency_Api.Features.Authorization.Services
@@ -7,6 +8,7 @@ namespace Flight_Agency_Api.Features.Authorization.Services
     {
         Task<Trip> CreateTrip(int userId, CreateTripRequest createTripRequest);
         Task<Trip> UpdateTrip(int userId, UpdateTripRequest updateTripRequest);
+        Task<List<Trip>> GetTrips(int userId);
     }
 
     public class TripsService : ITripsService
@@ -21,19 +23,31 @@ namespace Flight_Agency_Api.Features.Authorization.Services
         public async Task<Trip> CreateTrip(int userId, CreateTripRequest createTripRequest)
         {
             var existingUser = await UserContext.Users.FindAsync(userId);
-            var newTrip = new Trip(createTripRequest.Name, createTripRequest.Destination, createTripRequest.Departure, createTripRequest.Arrival);
+            var newTrip = new Trip()
+            {
+                Destination = createTripRequest.Destination,
+                Stops = createTripRequest.Stops
+            };
 
-            existingUser.Trip = newTrip;
+            existingUser.Trips.Add(newTrip);
             await UserContext.SaveChangesAsync();
 
             return newTrip;
         }
 
+        public async Task<List<Trip>> GetTrips(int userId)
+        {
+            var existingUser = await UserContext.Users.FindAsync(userId);
+            return existingUser.Trips;
+        }
+
         public async Task<Trip> UpdateTrip(int userId, UpdateTripRequest updateTripRequest)
         {
-            var updatedTrip = new Trip(updateTripRequest.Name, updateTripRequest.Destination, updateTripRequest.Departure, updateTripRequest.Arrival)
+            var updatedTrip = new Trip()
             {
-                Id = updateTripRequest.Id
+                Id = updateTripRequest.Id,
+                Destination = updateTripRequest.Destination,
+                Stops = updateTripRequest.Stops
             };
 
             UserContext.Trips.Update(updatedTrip);
