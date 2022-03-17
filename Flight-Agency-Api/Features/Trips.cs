@@ -19,7 +19,7 @@ public class Trips
         TripService = tripService;
     }
 
-    [FunctionName("CreateTrip")]
+    [FunctionName(nameof(CreateTrip))]
     public async Task<IActionResult> CreateTrip(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "{userId}/trips")]
         HttpRequest req,
@@ -33,7 +33,7 @@ public class Trips
         return new OkObjectResult(trip);
     }
 
-    [FunctionName("GetTrips")]
+    [FunctionName(nameof(GetTrips))]
     public async Task<IActionResult> GetTrips(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/trips")]
         HttpRequest req,
@@ -44,7 +44,7 @@ public class Trips
         return new OkObjectResult(trips);
     }
 
-    [FunctionName("UpdateTrip")]
+    [FunctionName(nameof(UpdateTrip))]
     public async Task<IActionResult> UpdateTrip(
     [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{userId}/trips")]
         HttpRequest req,

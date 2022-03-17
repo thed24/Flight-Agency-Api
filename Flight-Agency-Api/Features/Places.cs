@@ -22,7 +22,7 @@ public class Places
         key = result.Payload.Data.ToStringUtf8();
     }
 
-    [FunctionName("PlacesNearBy")]
+    [FunctionName(nameof(GetPlaces))]
     public async Task<IActionResult> GetPlaces(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "places/nearBy")]
         HttpRequest req,

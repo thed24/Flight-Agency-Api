@@ -19,7 +19,7 @@ public class Authorization
         AuthorizationService = authorizationService;
     }
 
-    [FunctionName("Login")]
+    [FunctionName(nameof(Login))]
     public async Task<IActionResult> Login(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "auth/login")]
         HttpRequest req,
@@ -34,7 +34,7 @@ public class Authorization
         return new OkObjectResult(result);
     }
 
-    [FunctionName("Register")]
+    [FunctionName(nameof(Register))]
     public async Task<IActionResult> Register(
     [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "auth/register")]
         HttpRequest req,
