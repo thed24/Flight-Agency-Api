@@ -1,6 +1,4 @@
 ﻿using Flight_Agency_Domain;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Flight_Agency_Api.Features.Authorization.Services
 {

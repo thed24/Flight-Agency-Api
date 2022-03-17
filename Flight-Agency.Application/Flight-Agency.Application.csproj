@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Flight_Agency_Domain</RootNamespace>
+    <RootNamespace>Flight_Agency.Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Flight-Agency-Infrastructure\Flight-Agency.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>

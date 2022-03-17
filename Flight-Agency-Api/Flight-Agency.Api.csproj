@@ -22,10 +22,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Authorization\Responses\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Flight-Agency-Domain\Flight-Agency.Domain.csproj" />
     <ProjectReference Include="..\Flight-Agency-Infrastructure\Flight-Agency.Infrastructure.csproj" />
+    <ProjectReference Include="..\Flight-Agency.Application\Flight-Agency.Application.csproj" />
   </ItemGroup>
 </Project>
