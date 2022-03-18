@@ -14,6 +14,12 @@ namespace Flight_Agency_Api
             var context = new UserContext();
             context.Database.EnsureCreated();
 
+            builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader())
+            );
+
             builder.Services.AddSingleton(context);
             builder.Services.AddSingleton<IAuthorizationService, AuthorizationService>();
             builder.Services.AddSingleton<ITripsService, TripsService>();
