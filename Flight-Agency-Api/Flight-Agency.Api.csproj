@@ -5,8 +5,9 @@
     <RootNamespace>Flight_Agency_Api</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="1.0.0" />
+    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="1.8.0" />
     <PackageReference Include="GoogleMapsApi" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
