@@ -21,12 +21,8 @@ public class Places : ControllerBase
     [HttpGet(Name = "GetPlaces")]
     [Route("places/nearBy")]
     public async Task<IActionResult> GetPlaces(
-        HttpRequest req,
-        ILogger log)
+        [FromBody] PlacesNearByRequest placesNearByRequest)
     {
-        var placesNearByRequest = Mapper.MapQueryParamsToObject<PlacesNearByRequest>(req.Query);
-        if (placesNearByRequest is null) return new BadRequestResult();
-
         placesNearByRequest.ApiKey = key;
         PlacesNearByResponse placesNearBy = await GoogleMaps.PlacesNearBy.QueryAsync(placesNearByRequest);
         return new OkObjectResult(placesNearBy);

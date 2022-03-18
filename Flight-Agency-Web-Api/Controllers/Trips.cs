@@ -15,41 +15,32 @@ public class Trips : ControllerBase
         TripService = tripService;
     }
 
-    [HttpPost(Name = "GetWeatherForecast")]
+    [HttpPost(Name = "CreateTrip")]
     [Route("{userId}/trips")]
     public async Task<IActionResult> CreateTrip(
-        HttpRequest req,
-        int userId,
-        ILogger log)
+        [FromBody] CreateTripRequest createTripRequest,
+        [FromRoute] int userId)
     {
-        var createTripRequest = await Mapper.MapStreamToObject<CreateTripRequest>(req.Body);
-        if (createTripRequest is null) return new BadRequestResult();
-
         var trip = await TripService.CreateTrip(userId, createTripRequest);
         return new OkObjectResult(trip);
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet(Name = "GetTrips")]
     [Route("{userId}/trips")]
     public async Task<IActionResult> GetTrips(
-        HttpRequest req,
-        int userId,
-        ILogger log)
+        [FromBody] CreateTripRequest createTripRequest,
+        [FromRoute] int userId)
     {
         var trips = await TripService.GetTrips(userId);
         return new OkObjectResult(trips);
     }
 
-    [HttpPut(Name = "GetWeatherForecast")]
+    [HttpPut(Name = "UpdateTrip")]
     [Route("{userId}/trips")]
     public async Task<IActionResult> UpdateTrip(
-        HttpRequest req,
-        int userId,
-        ILogger log)
+        [FromBody] UpdateTripRequest updateTripRequest,
+        [FromRoute] int userId)
     {
-        var updateTripRequest = await Mapper.MapStreamToObject<UpdateTripRequest>(req.Body);
-        if (updateTripRequest is null) return new BadRequestResult();
-
         var trip = await TripService.UpdateTrip(userId, updateTripRequest);
         return new OkObjectResult(trip);
     }
