@@ -8,6 +8,6 @@ RUN cd /src/dotnet-function-app/ && \
 FROM mcr.microsoft.com/azure-functions/dotnet:4
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true \
-    ASPNETCORE_URLS=https://+:8080
+    ASPNETCORE_URLS=http://+:8080
 
 COPY --from=installer-env ["/home/site/wwwroot", "/home/site/wwwroot"]
