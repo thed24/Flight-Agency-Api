@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flight-Agency.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flight-Agency.Application", "Flight-Agency.Application\Flight-Agency.Application.csproj", "{4611499B-816B-4452-AA2D-EB08B861C646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flight-Agency-Web-Api", "Flight-Agency-Web-Api\Flight-Agency-Web-Api.csproj", "{1C7C5F29-B956-4A20-8BD7-8247B5580644}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flight-Agency.WebApi", "Flight-Agency-Web-Api\Flight-Agency.WebApi.csproj", "{1C7C5F29-B956-4A20-8BD7-8247B5580644}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
