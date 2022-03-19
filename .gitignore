@@ -8,6 +8,7 @@ local.settings.json
 
 obj/
 bin/
+*.db*
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
