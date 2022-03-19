@@ -1,4 +1,9 @@
 using Flight_Agency_Api.Features.Authorization.Services;
+using Flight_Agency_Domain;
+using Google.Cloud.SecretManager.V1;
+using GoogleMapsApi;
+using GoogleMapsApi.Entities.PlacesNearBy.Request;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,9 +11,6 @@ var context = new UserContext();
 context.Database.EnsureCreated();
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()
@@ -19,16 +21,70 @@ builder.Services.AddSingleton(context);
 builder.Services.AddSingleton<IAuthorizationService, AuthorizationService>();
 builder.Services.AddSingleton<ITripsService, TripsService>();
 
+var client = SecretManagerServiceClient.Create();
+var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
+var key = result.Payload.Data.ToStringUtf8();
+
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
+
+// auth
+app.MapPost("auth/login", async (
+    [FromServices] AuthorizationService authorizationService,
+    LoginRequest loginRequest) => { 
+    var result = await authorizationService.Login(loginRequest);
+    if (result is null) throw new Exception("Login failed");
+
+    return result;
+});
+
+app.MapPost("auth/register", async (
+    [FromServices] AuthorizationService authorizationService,
+    CreateUserRequest createUserRequest) => {
+    var newUser = await authorizationService.Register(createUserRequest);
+    if (newUser is null) throw new Exception("User already exists");
+
+    return newUser;
+});
+
+// places
+app.MapPost("places/nearBy", async (
+    PlacesNearByRequest placesNearByRequest) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    placesNearByRequest.ApiKey = key;
+    return await GoogleMaps.PlacesNearBy.QueryAsync(placesNearByRequest);
+});
+
+// trips
+app.MapPost("{userId}/trips", async (
+    [FromServices] ITripsService tripService,
+    CreateTripRequest createTripRequest,
+    int userId) =>
+{
+    return await tripService.CreateTrip(userId, createTripRequest);
+});
+
+app.MapGet("{userId}/trips", async (
+    [FromServices] ITripsService tripService,
+    int userId) =>
+{
+    return await tripService.GetTrips(userId);
+});
+
+app.MapPut("{userId}/trips", async (
+    [FromServices] ITripsService tripService,
+    UpdateTripRequest updateTripRequest,
+    int userId) =>
+{
+    return await tripService.UpdateTrip(userId, updateTripRequest);
+});
+
+if (builder.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseCors();
-app.Urls.Add("http://+:8080");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+await app.RunAsync();
