@@ -92,8 +92,10 @@ if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
+app.Urls.Add($"http://+:{port}");
+
 app.UseCors();
-app.Urls.Add("http://*:8080");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
