@@ -21,10 +21,17 @@ builder.Services.AddSingleton(context);
 builder.Services.AddSingleton<IAuthorizationService, AuthorizationService>();
 builder.Services.AddSingleton<ITripsService, TripsService>();
 
-var client = SecretManagerServiceClient.Create();
-var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
-var key = result.Payload.Data.ToStringUtf8();
-
+string key;
+try
+{
+    var client = SecretManagerServiceClient.Create();
+    var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
+    key = result.Payload.Data.ToStringUtf8();
+}
+catch (Exception ex)
+{
+    key = "";
+}
 var app = builder.Build();
 
 // auth
