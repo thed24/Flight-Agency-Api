@@ -30,13 +30,14 @@ try
 }
 catch (Exception ex)
 {
+    Console.WriteLine(ex.Message);
     key = "";
 }
 var app = builder.Build();
 
 // auth
-app.MapPost("auth/login", async (
-    [FromServices] AuthorizationService authorizationService,
+app.MapPost("api/auth/login", async (
+    [FromServices] IAuthorizationService authorizationService,
     LoginRequest loginRequest) =>
 {
     var result = await authorizationService.Login(loginRequest);
@@ -45,8 +46,8 @@ app.MapPost("auth/login", async (
     return result;
 });
 
-app.MapPost("auth/register", async (
-    [FromServices] AuthorizationService authorizationService,
+app.MapPost("api/auth/register", async (
+    [FromServices] IAuthorizationService authorizationService,
     CreateUserRequest createUserRequest) =>
 {
     var newUser = await authorizationService.Register(createUserRequest);
@@ -56,7 +57,7 @@ app.MapPost("auth/register", async (
 });
 
 // places
-app.MapPost("places/nearBy", async (
+app.MapPost("api/places/nearBy", async (
     PlacesNearByRequest placesNearByRequest) =>
 {
     placesNearByRequest.ApiKey = key;
@@ -64,7 +65,7 @@ app.MapPost("places/nearBy", async (
 });
 
 // trips
-app.MapPost("{userId}/trips", async (
+app.MapPost("api/{userId}/trips", async (
     [FromServices] ITripsService tripService,
     CreateTripRequest createTripRequest,
     int userId) =>
@@ -72,7 +73,7 @@ app.MapPost("{userId}/trips", async (
     return await tripService.CreateTrip(userId, createTripRequest);
 });
 
-app.MapGet("{userId}/trips", async (
+app.MapGet("api/{userId}/trips", async (
     [FromServices] ITripsService tripService,
     int userId) =>
 {
