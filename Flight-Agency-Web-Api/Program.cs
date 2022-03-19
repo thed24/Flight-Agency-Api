@@ -31,14 +31,14 @@ try
 catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
-    key = "";
+    key = "AIzaSyD5ALoWQXvyXXglGtNdgQbPUw9hUabxUrM";
 }
 var app = builder.Build();
 
 // auth
 app.MapPost("api/auth/login", async (
     [FromServices] IAuthorizationService authorizationService,
-    LoginRequest loginRequest) =>
+    [FromBody] LoginRequest loginRequest) =>
 {
     var result = await authorizationService.Login(loginRequest);
     if (result is null) throw new Exception("Login failed");
@@ -48,7 +48,7 @@ app.MapPost("api/auth/login", async (
 
 app.MapPost("api/auth/register", async (
     [FromServices] IAuthorizationService authorizationService,
-    CreateUserRequest createUserRequest) =>
+    [FromBody] CreateUserRequest createUserRequest) =>
 {
     var newUser = await authorizationService.Register(createUserRequest);
     if (newUser is null) throw new Exception("User already exists");
@@ -57,33 +57,43 @@ app.MapPost("api/auth/register", async (
 });
 
 // places
-app.MapPost("api/places/nearBy", async (
-    PlacesNearByRequest placesNearByRequest) =>
+app.MapGet("api/places/nearBy", async (
+    [FromQuery] double lat,
+    [FromQuery] double lng,
+    [FromQuery] int radius,
+    [FromQuery] string keyword,
+    [FromQuery] int zoom) =>
 {
-    placesNearByRequest.ApiKey = key;
-    return await GoogleMaps.PlacesNearBy.QueryAsync(placesNearByRequest);
+    var request = new PlacesNearByRequest
+    {
+        ApiKey = key,
+        Location = new GoogleMapsApi.Entities.Common.Location(lat, lng),
+        Radius = radius,
+        Type = keyword,
+    };
+    return await GoogleMaps.PlacesNearBy.QueryAsync(request);
 });
 
 // trips
 app.MapPost("api/{userId}/trips", async (
     [FromServices] ITripsService tripService,
-    CreateTripRequest createTripRequest,
-    int userId) =>
+    [FromBody] CreateTripRequest createTripRequest,
+    [FromRoute] int userId) =>
 {
     return await tripService.CreateTrip(userId, createTripRequest);
 });
 
 app.MapGet("api/{userId}/trips", async (
     [FromServices] ITripsService tripService,
-    int userId) =>
+    [FromRoute] int userId) =>
 {
     return await tripService.GetTrips(userId);
 });
 
 app.MapPut("{userId}/trips", async (
     [FromServices] ITripsService tripService,
-    UpdateTripRequest updateTripRequest,
-    int userId) =>
+    [FromBody] UpdateTripRequest updateTripRequest,
+    [FromRoute] int userId) =>
 {
     return await tripService.UpdateTrip(userId, updateTripRequest);
 });
