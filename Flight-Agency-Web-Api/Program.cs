@@ -30,7 +30,8 @@ var app = builder.Build();
 // auth
 app.MapPost("auth/login", async (
     [FromServices] AuthorizationService authorizationService,
-    LoginRequest loginRequest) => { 
+    LoginRequest loginRequest) =>
+{
     var result = await authorizationService.Login(loginRequest);
     if (result is null) throw new Exception("Login failed");
 
@@ -39,7 +40,8 @@ app.MapPost("auth/login", async (
 
 app.MapPost("auth/register", async (
     [FromServices] AuthorizationService authorizationService,
-    CreateUserRequest createUserRequest) => {
+    CreateUserRequest createUserRequest) =>
+{
     var newUser = await authorizationService.Register(createUserRequest);
     if (newUser is null) throw new Exception("User already exists");
 
@@ -84,6 +86,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.Urls.Add("http://*:8080");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
