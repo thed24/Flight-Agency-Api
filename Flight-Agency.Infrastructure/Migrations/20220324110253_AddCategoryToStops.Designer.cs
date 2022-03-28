@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,14 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flight_Agency_Infrastructure.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20220324110253_AddCategoryToStops")]
+    partial class AddCategoryToStops
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
-            modelBuilder.Entity("Flight_Agency_Domain.DateRange", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.DateRange", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +35,7 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.ToTable("DateRange");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Location", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +52,7 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Stop", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,6 +61,9 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("INTEGER");
@@ -84,7 +89,7 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.ToTable("Stops");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +109,7 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.User", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,21 +132,21 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Stop", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
                 {
-                    b.HasOne("Flight_Agency_Domain.Location", "Location")
+                    b.HasOne("FlightAgency.Infrastructure.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Flight_Agency_Domain.DateRange", "Time")
+                    b.HasOne("FlightAgency.Infrastructure.DateRange", "Time")
                         .WithMany()
                         .HasForeignKey("TimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Flight_Agency_Domain.Trip", null)
+                    b.HasOne("FlightAgency.Infrastructure.Trip", null)
                         .WithMany("Stops")
                         .HasForeignKey("TripId");
 
@@ -150,19 +155,19 @@ namespace Flight_Agency_Infrastructure.Migrations
                     b.Navigation("Time");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
                 {
-                    b.HasOne("Flight_Agency_Domain.User", null)
+                    b.HasOne("FlightAgency.Infrastructure.User", null)
                         .WithMany("Trips")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
                 {
                     b.Navigation("Stops");
                 });
 
-            modelBuilder.Entity("Flight_Agency_Domain.User", b =>
+            modelBuilder.Entity("FlightAgency.Infrastructure.User", b =>
                 {
                     b.Navigation("Trips");
                 });

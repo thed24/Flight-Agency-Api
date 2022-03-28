@@ -2,13 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Flight_Agency.Application</RootNamespace>
+    <RootNamespace>FlightAgency.Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Flight-Agency-Infrastructure\Flight-Agency.Infrastructure.csproj" />
+    <ProjectReference Include="..\Flight-Agency.Infrastructure\Flight-Agency.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GoogleMapsApi" Version="1.2.0" />
+    <PackageReference Include="LanguageExt.Core" Version="4.0.4" />
   </ItemGroup>
 
 </Project>

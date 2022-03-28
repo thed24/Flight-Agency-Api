@@ -2,9 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/dotnetcore,csharp,visualstudiocode,azurefunctions
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotnetcore,csharp,visualstudiocode,azurefunctions
 
-### AzureFunctions ###
-# Azure Functions localsettings file
-local.settings.json
+appsettings.Development.json
 
 obj/
 bin/

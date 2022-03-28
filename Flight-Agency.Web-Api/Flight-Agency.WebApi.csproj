@@ -4,12 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Flight_Agency_Web_Api</RootNamespace>
+    <RootNamespace>FlightAgency-WebApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Cloud.SecretManager.V1" Version="1.8.0" />
-	<PackageReference Include="GoogleMapsApi" Version="1.2.0" />
+	<PackageReference Include="LanguageExt.Core" Version="4.0.4" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

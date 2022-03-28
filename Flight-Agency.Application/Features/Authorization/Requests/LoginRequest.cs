@@ -1,7 +1,6 @@
-﻿namespace Flight_Agency_Domain
-{
-    public record LoginRequest(
-        string Password,
-        string Email
-    );
-}
+﻿namespace FlightAgency.Application.Features.Authorization.Requests;
+
+public record LoginRequest(
+    string Password,
+    string Email
+);

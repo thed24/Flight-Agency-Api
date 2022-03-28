@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using FlightAgency.Infrastructure;
 
-namespace Flight_Agency_Domain
-{
-    public record CreateTripRequest(
-        string Name,
-        string Destination,
-        IEnumerable<Stop> Stops
-    );
+namespace FlightAgency.Application.Features.Trips.Requests;
 
-    public record UpdateTripRequest(
-        int Id,
-        string Name,
-        string Destination,
-        IEnumerable<Stop> Stops
-    );
-}
+public record CreateTripRequest(
+    string Name,
+    string Destination,
+    IEnumerable<Stop> Stops
+);
+
+public record UpdateTripRequest(
+    int Id,
+    string Name,
+    string Destination,
+    IEnumerable<Stop> Stops
+);

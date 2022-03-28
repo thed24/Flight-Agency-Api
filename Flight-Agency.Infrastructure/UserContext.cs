@@ -1,4 +1,4 @@
-using Flight_Agency_Domain;
+using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
