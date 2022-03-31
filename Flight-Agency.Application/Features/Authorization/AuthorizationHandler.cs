@@ -26,10 +26,7 @@ public class AuthorizationHandler : IAuthorizationHandler
             .FindUserByEmail(loginRequest.Email)
             .Match<Either<string, User>>(None: () => "User does not exist.",
                                          Some: (user) => user)
-            .Match<Either<string, User>>(Left: (error) => error,
-                                         Right: (user) => user.Password == loginRequest.Password
-                                                            ? user
-                                                            : "Password does not match.");
+            .Bind<User>(user => user.Password == loginRequest.Password ? user : "Wrong password.");
 
     public Either<string, User> Register(CreateUserRequest request) =>
         UserContext
@@ -37,8 +34,7 @@ public class AuthorizationHandler : IAuthorizationHandler
             .FindUserByEmail(request.Email)
             .Match<Either<string, User>>(None: () => new User(request.Email, request.Password, request.Name),
                                          Some: (_) => "Already exists.")
-            .Match<Either<string, User>>(Left: (error) => error,
-                                         Right: (user) => PersistUser(user));
+            .Bind<User>(user => PersistUser(user));
 
     private User PersistUser(User user)
     {

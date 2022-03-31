@@ -2,32 +2,36 @@
 using FlightAgency.Application.Features.Places.Requests;
 using FlightAgency.Application.Features.Places.Responses;
 using FlightAgency.Infrastructure;
+using Google.Cloud.SecretManager.V1;
 using GoogleMapsApi;
 using GoogleMapsApi.Entities.PlacesNearBy.Request;
 using LanguageExt;
+using Microsoft.Extensions.Configuration;
 
 namespace FlightAgency.Application.Features.Places.PlacesHandler;
 
 public interface IPlacesHandler
 {
-    public Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request, string key);
-    public Task<IEnumerable<GetPlacesNearbyResponse>> GetSuggestion(Trip trip, string key);
+    public Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request);
+    public Task<IEnumerable<GetPlacesNearbyResponse>> GetSuggestion(Trip trip);
 }
 
 public class PlacesHandler : IPlacesHandler
 {
+    public IConfiguration Configuration;
     public UserContext UserContext;
 
-    public PlacesHandler(UserContext userContext)
+    public PlacesHandler(UserContext userContext, IConfiguration configuration)
     {
         UserContext = userContext;
+        Configuration = configuration;
     }
 
-    public async Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request, string key)
+    public async Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request)
     {
         var newRequest = new PlacesNearByRequest()
         {
-            ApiKey = key,
+            ApiKey = GetApiKey(),
             Radius = request.Radius,
             Keyword = request.Keyword,
             Location = new GoogleMapsApi.Entities.Common.Location(request.Lat, request.Lng)
@@ -37,10 +41,10 @@ public class PlacesHandler : IPlacesHandler
         return response.MapToResponse();
     }
 
-    public Task<IEnumerable<GetPlacesNearbyResponse>> GetSuggestion(Trip trip, string key) =>
-        CalculateStops(trip, key);
+    public Task<IEnumerable<GetPlacesNearbyResponse>> GetSuggestion(Trip trip) =>
+        CalculateStops(trip);
 
-    private async Task<IEnumerable<GetPlacesNearbyResponse>> CalculateStops(Trip trip, string key)
+    private async Task<IEnumerable<GetPlacesNearbyResponse>> CalculateStops(Trip trip)
     {
         if (trip == null || trip.Stops.Any() is false)
         {
@@ -57,7 +61,7 @@ public class PlacesHandler : IPlacesHandler
 
         var createRequest = (Category category) => new PlacesNearByRequest()
         {
-            ApiKey = key,
+            ApiKey = GetApiKey(),
             Radius = 2000,
             Keyword = category.ToString(),
             Location = new GoogleMapsApi.Entities.Common.Location(randomStop.Location.Latitude, randomStop.Location.Longitude)
@@ -76,5 +80,19 @@ public class PlacesHandler : IPlacesHandler
 
         var output = await Task.WhenAll(suggestions);
         return output.Select(x => x.MapToResponse());
+    }
+
+    public string GetApiKey()
+    {
+        try
+        {
+            var client = SecretManagerServiceClient.Create();
+            var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
+            return result.Payload.Data.ToStringUtf8();
+        }
+        catch (Exception ex)
+        {
+            return Configuration["GoogleApiKey"];
+        }
     }
 }

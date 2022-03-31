@@ -5,7 +5,6 @@ using FlightAgency.Application.Features.Places.Requests;
 using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
-using FlightAgency.WebApi.Configs.ApiKeys;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,13 +19,10 @@ builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
     .AllowAnyHeader())
 );
 
-var keys = ProgramHelper.GetApiKeys("projects/620313617886/secrets/google-api-key");
-
 builder.Services.AddSingleton(context);
 builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
 builder.Services.AddSingleton<ITripsHandler, TripsHandler>();
 builder.Services.AddSingleton<IPlacesHandler, PlacesHandler>();
-builder.Services.AddSingleton<IApiKeys>(keys);
 
 var app = builder.Build();
 
@@ -73,12 +69,12 @@ app.MapGet("api/places/nearBy", async (
     [FromServices] IPlacesHandler placesHandler) =>
 {
     var request = new GetPlacesNearbyRequest(lat, lng, radius, keyword, zoom);
-    return await placesHandler.GetPlacesNearbyAsync(request, keys.GoogleApiKey);
+    return await placesHandler.GetPlacesNearbyAsync(request);
 });
 
 app.MapPost("api/places/suggest", async (
     [FromServices] IPlacesHandler placesHandler,
-    [FromBody] Trip trip) => await placesHandler.GetSuggestion(trip, keys.GoogleApiKey));
+    [FromBody] Trip trip) => await placesHandler.GetSuggestion(trip));
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://+:{port}");

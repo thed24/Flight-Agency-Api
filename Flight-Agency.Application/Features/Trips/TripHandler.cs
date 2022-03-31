@@ -34,10 +34,8 @@ public class TripsHandler : ITripsHandler
                                              user.Trips.Add(new Trip(request.Destination, request.Stops));
                                              return user;
                                          })
-            .Match<Either<string, User>>(Left: (error) => error,
-                                         Right: (user) => PersistUser(user, UserContext.Users.Update))
-            .Match<Either<string, Trip>>(Left: (error) => error,
-                                         Right: (user) => user.Trips.Last());
+            .Bind<User>(user => PersistUser(user, UserContext.Users.Update))
+            .Bind<Trip>(user => user.Trips.Last());
 
     public Either<string, List<Trip>> GetTrips(int userId) =>
         UserContext
@@ -53,8 +51,7 @@ public class TripsHandler : ITripsHandler
             .Find(trip => trip.Id == request.Id)
             .Match<Either<string, Trip>>(None: () => "User not found.",
                                          Some: (_) => new Trip(request.Name, request.Stops, request.Id))
-            .Match<Either<string, Trip>>(Left: (error) => error,
-                                         Right: (trip) => PersistTrip(trip, UserContext.Trips.Update));
+            .Bind<Trip>(trip => PersistTrip(trip, UserContext.Trips.Update));
 
     public Trip PersistTrip(Trip trip, Func<Trip, EntityEntry<Trip>> sideEffectFunc)
     {
