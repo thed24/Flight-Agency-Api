@@ -6,13 +6,13 @@ namespace FlightAgency.Application.Common;
 
 public static class UserContextExtensions
 {
-    public static Option<User> FindUserByEmail(this Arr<User> users, string email) =>
+    public static Option<User> FindUserByEmail(this List<User> users, string email) =>
         users.Find(user => user.Email == email);
 
-    public static Option<User> FindUserById(this Arr<User> users, int id) =>
+    public static Option<User> FindUserById(this List<User> users, int id) =>
         users.Find(user => user.Id == id);
 
-    public static Arr<User> IncludeAll(this DbSet<User> users)
+    public static List<User> IncludeAll(this DbSet<User> users)
     {
         return users
             .Include(user => user.Trips)
@@ -21,6 +21,6 @@ public static class UserContextExtensions
             .Include(user => user.Trips)
             .ThenInclude(trip => trip.Stops)
             .ThenInclude(stop => stop.Time)
-            .ToArr();
+            .ToList();
     }
 }

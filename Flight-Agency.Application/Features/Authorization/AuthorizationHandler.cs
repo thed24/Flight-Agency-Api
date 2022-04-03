@@ -23,7 +23,7 @@ public class AuthorizationHandler : IAuthorizationHandler
     public Either<string, User> Login(LoginRequest loginRequest) =>
         UserContext
             .Users
-            .ToArr()
+            .ToList()
             .FindUserByEmail(loginRequest.Email)
             .Match<Either<string, User>>(None: () => "A user with that email does not exist.",
                                          Some: (user) => user)
@@ -32,7 +32,7 @@ public class AuthorizationHandler : IAuthorizationHandler
     public Either<string, User> Register(CreateUserRequest request) =>
         UserContext
             .Users
-            .ToArr()
+            .ToList()
             .FindUserByEmail(request.Email)
             .Match<Either<string, User>>(None: () => new User(request.Email, request.Password, request.Name),
                                          Some: (_) => "A user with that email already exists.")

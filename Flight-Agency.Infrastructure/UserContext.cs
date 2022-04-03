@@ -27,10 +27,10 @@ public class UserContext : DbContext
 
             var connectionString = connection.ConnectionString;
             var version = ServerVersion.AutoDetect(connectionString);
-            optionsBuilder.UseMySql(connectionString, version)
-                    .LogTo(Console.WriteLine)
-                    .EnableSensitiveDataLogging()
-                    .EnableDetailedErrors();
+
+            optionsBuilder
+                .UseMySql(connectionString, version)
+                .LogTo(Console.WriteLine);
         }
         else
         {

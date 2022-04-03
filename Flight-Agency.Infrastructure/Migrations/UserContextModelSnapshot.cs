@@ -30,7 +30,7 @@ namespace Flight_Agency_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DateRange");
+                    b.ToTable("DateRange", (string)null);
                 });
 
             modelBuilder.Entity("FlightAgency.Infrastructure.Location", b =>
@@ -47,7 +47,7 @@ namespace Flight_Agency_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Location", (string)null);
                 });
 
             modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
@@ -84,7 +84,7 @@ namespace Flight_Agency_Infrastructure.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("Stops");
+                    b.ToTable("Stops", (string)null);
                 });
 
             modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
@@ -104,7 +104,7 @@ namespace Flight_Agency_Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Trips");
+                    b.ToTable("Trips", (string)null);
                 });
 
             modelBuilder.Entity("FlightAgency.Infrastructure.User", b =>
@@ -127,7 +127,7 @@ namespace Flight_Agency_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
