@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var context = new UserContext();
-context.Database.EnsureCreated();
+
 context.Database.Migrate();
 
 builder.Services.AddControllers();
