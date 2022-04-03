@@ -6,7 +6,7 @@ namespace FlightAgency.Application.Common;
 
 public static class UserContextExtensions
 {
-    public static Option<User> FindUserByEmail(this DbSet<User> users, string email) =>
+    public static Option<User> FindUserByEmail(this Arr<User> users, string email) =>
         users.Find(user => user.Email == email);
 
     public static Option<User> FindUserById(this Arr<User> users, int id) =>
