@@ -6,11 +6,13 @@ using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var context = new UserContext();
 context.Database.EnsureCreated();
+context.Database.Migrate();
 
 builder.Services.AddControllers();
 builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
@@ -40,20 +42,20 @@ app.MapPost("api/auth/register", (
         .MapToApiResponse<string, User>());
 
 // trips
-app.MapPost("api/{userId}/trips", (
+app.MapPost("api/users/{userId}/trips", (
     [FromServices] ITripsHandler tripHandler,
     [FromBody] CreateTripRequest createTripRequest,
     [FromRoute] int userId) => tripHandler
         .CreateTrip(userId, createTripRequest)
         .MapToApiResponse<string, Trip>());
 
-app.MapGet("api/{userId}/trips", (
+app.MapGet("api/users/{userId}/trips", (
     [FromServices] ITripsHandler tripHandler,
     [FromRoute] int userId) => tripHandler
         .GetTrips(userId)
         .MapToApiResponse<string, List<Trip>>());
 
-app.MapPut("{userId}/trips", (
+app.MapPut("api/users/{userId}/trips", (
     [FromServices] ITripsHandler tripHandler,
     [FromBody] UpdateTripRequest updateTripRequest) => tripHandler
         .UpdateTrip(updateTripRequest)
