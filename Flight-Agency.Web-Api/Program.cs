@@ -72,6 +72,15 @@ app.MapGet("api/places/nearBy", async (
     return await placesHandler.GetPlacesNearbyAsync(request);
 });
 
+app.MapGet("api/places/reverseGeocode", async (
+    [FromQuery] double lat,
+    [FromQuery] double lng,
+    [FromServices] IPlacesHandler placesHandler) =>
+{
+    var request = new GetAddressRequest(lat, lng);
+    return await placesHandler.GetAddressAsync(request);
+});
+
 app.MapPost("api/places/suggest", async (
     [FromServices] IPlacesHandler placesHandler,
     [FromBody] Trip trip) => await placesHandler.GetSuggestion(trip));

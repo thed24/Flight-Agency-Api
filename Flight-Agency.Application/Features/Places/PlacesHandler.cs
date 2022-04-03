@@ -4,6 +4,7 @@ using FlightAgency.Application.Features.Places.Responses;
 using FlightAgency.Infrastructure;
 using Google.Cloud.SecretManager.V1;
 using GoogleMapsApi;
+using GoogleMapsApi.Entities.Geocoding.Request;
 using GoogleMapsApi.Entities.PlacesNearBy.Request;
 using LanguageExt;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ namespace FlightAgency.Application.Features.Places.PlacesHandler;
 public interface IPlacesHandler
 {
     public Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request);
+    public Task<GetAddressResponse> GetAddressAsync(GetAddressRequest request);
     public Task<IEnumerable<GetPlacesNearbyResponse>> GetSuggestion(Trip trip);
 }
 
@@ -38,6 +40,18 @@ public class PlacesHandler : IPlacesHandler
         };
 
         var response = await GoogleMaps.PlacesNearBy.QueryAsync(newRequest);
+        return response.MapToResponse();
+    }
+
+    public async Task<GetAddressResponse> GetAddressAsync(GetAddressRequest request)
+    {
+        var newRequest = new GeocodingRequest()
+        {
+            ApiKey = GetApiKey(),
+            Location = new GoogleMapsApi.Entities.Common.Location(request.Lat, request.Lng)
+        };
+
+        var response = await GoogleMaps.Geocode.QueryAsync(newRequest);
         return response.MapToResponse();
     }
 

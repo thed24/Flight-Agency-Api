@@ -1,5 +1,6 @@
 ﻿using FlightAgency.Application.Features.Places.Responses;
 using FlightAgency.Infrastructure;
+using GoogleMapsApi.Entities.Geocoding.Response;
 using GoogleMapsApi.Entities.PlacesNearBy.Response;
 
 namespace FlightAgency.Application.Features.Places.Mappers;
@@ -23,5 +24,18 @@ public static class PlacesMapper
                                     0, result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
                                 ))
                 )));
+    }
+
+    public static GetAddressResponse MapToResponse(this GeocodingResponse libraryResponse)
+    {
+        return new GetAddressResponse(libraryResponse.Results.Select(result =>
+            new GetAddressResponseData(
+                result.PartialMatch,
+                result.FormattedAddress,
+                new Responses.Geometry(
+                                new Location(
+                                    0, result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
+                                )))
+        ));
     }
 }
