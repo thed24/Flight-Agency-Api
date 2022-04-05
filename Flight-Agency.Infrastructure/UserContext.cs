@@ -7,6 +7,8 @@ public class UserContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Trip> Trips { get; set; }
     public DbSet<Stop> Stops { get; set; }
+    public DbSet<DateRange> Dates { get; set; }
+    public DbSet<Location> Locations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -64,7 +66,12 @@ public class UserContext : DbContext
             modelBuilder.Entity(modelType)
                         .Property(key.Name)
                         .UseMySqlIdentityColumn()
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .IsRequired()
+                        .HasColumnName(key.Name)
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NULL")
+                        .Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
         }
     }
 }
