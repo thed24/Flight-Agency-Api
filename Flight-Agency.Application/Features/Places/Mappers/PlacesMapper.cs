@@ -21,7 +21,7 @@ public static class PlacesMapper
                     PlaceId: result.PlaceId,
                     Geometry: new Responses.Geometry(
                                 new Location(
-                                    0, result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
+                                    result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
                                 ))
                 )));
     }
@@ -34,7 +34,7 @@ public static class PlacesMapper
                 result.FormattedAddress,
                 new Responses.Geometry(
                                 new Location(
-                                    0, result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
+                                    result.Geometry.Location.Latitude, result.Geometry.Location.Longitude
                                 )))
         ));
     }

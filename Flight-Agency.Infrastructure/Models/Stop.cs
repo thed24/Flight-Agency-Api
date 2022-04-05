@@ -13,9 +13,4 @@ public class Stop
     public DateRange Time { get; set; }
     public string Address { get; set; }
     public Category Category { get; set; }
-
-    public Stop()
-    {
-
-    }
 }

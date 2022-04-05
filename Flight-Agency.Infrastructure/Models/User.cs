@@ -12,24 +12,10 @@ public class User
     public string Email { get; set; }
     public string Password { get; set; }
     public List<Trip> Trips { get; set; } = new List<Trip>();
-
-    public User(string password, string name, string email)
+    public User(string email, string password, string name)
     {
+        Email = email;
         Password = password;
         Name = name;
-        Email = email;
-    }
-
-    public User(User oldUser, Trip newTrip)
-    {
-        Password = oldUser.Password;
-        Name = oldUser.Name;
-        Email = oldUser.Email;
-        Trips = new List<Trip>() { newTrip }.Concat(oldUser.Trips).ToList();
-    }
-
-    public User()
-    {
-
     }
 }
