@@ -27,7 +27,9 @@ public class AuthorizationHandler : IAuthorizationHandler
             .FindUserByEmail(loginRequest.Email)
             .Match<Either<string, User>>(None: () => "A user with that email does not exist.",
                                          Some: (user) => user)
-            .Bind<User>(user => user.Password == loginRequest.Password ? user : "The password provided was incorrect.");
+            .Bind<User>(user => user.Password == loginRequest.Password
+                                        ? user
+                                        : "The password provided was incorrect.");
 
     public Either<string, User> Register(CreateUserRequest request) =>
         UserContext

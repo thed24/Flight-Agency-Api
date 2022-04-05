@@ -41,4 +41,30 @@ public class UserContext : DbContext
                 .EnableDetailedErrors();
         }
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        var modelTypes = typeof(UserContext).GetProperties()
+                         .Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                         .Select(x => x.PropertyType.GetGenericArguments().First())
+                         .ToList();
+
+        foreach (Type modelType in modelTypes)
+        {
+            var key = modelType.GetProperties()
+                               .FirstOrDefault(x => x.Name.Equals("Id", StringComparison.CurrentCultureIgnoreCase));
+
+            if (key == null)
+            {
+                continue;
+            }
+
+            modelBuilder.Entity(modelType)
+                        .Property(key.Name)
+                        .UseMySqlIdentityColumn()
+                        .Metadata.SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
+        }
+    }
 }
