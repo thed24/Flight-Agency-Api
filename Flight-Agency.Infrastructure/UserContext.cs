@@ -66,12 +66,7 @@ public class UserContext : DbContext
             modelBuilder.Entity(modelType)
                         .Property(key.Name)
                         .UseMySqlIdentityColumn()
-                        .ValueGeneratedOnAdd()
-                        .IsRequired()
-                        .HasColumnName(key.Name)
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("NULL")
-                        .Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
+                        .ValueGeneratedOnAddOrUpdate();
         }
     }
 }
