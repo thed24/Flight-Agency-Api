@@ -98,15 +98,6 @@ public class PlacesHandler : IPlacesHandler
 
     public string GetApiKey()
     {
-        try
-        {
-            var client = SecretManagerServiceClient.Create();
-            var result = client.AccessSecretVersion("projects/620313617886/secrets/google-api-key");
-            return result.Payload.Data.ToStringUtf8();
-        }
-        catch (Exception ex)
-        {
-            return Configuration["GoogleApiKey"];
-        }
+        return Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? Configuration["GoogleApiKey"];
     }
 }
