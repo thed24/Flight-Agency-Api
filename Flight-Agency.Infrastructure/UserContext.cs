@@ -64,7 +64,7 @@ public class UserContext : DbContext
             modelBuilder.Entity(modelType)
                         .Property(key.Name)
                         .UseMySqlIdentityColumn()
-                        .Metadata.SetBeforeSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
+                        .ValueGeneratedOnAdd();
         }
     }
 }
