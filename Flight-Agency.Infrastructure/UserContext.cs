@@ -66,7 +66,9 @@ public class UserContext : DbContext
             modelBuilder.Entity(modelType)
                         .Property(key.Name)
                         .UseMySqlIdentityColumn()
-                        .IsRequired();
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName(key.Name);
         }
     }
 }
