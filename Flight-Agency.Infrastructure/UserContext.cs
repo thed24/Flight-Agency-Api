@@ -1,6 +1,5 @@
 using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using MySqlConnector;
 
 public class UserContext : DbContext
@@ -14,34 +13,35 @@ public class UserContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var instanceConnectionName = Environment.GetEnvironmentVariable("INSTANCE_CONNECTION_NAME");
-        if (instanceConnectionName is not null)
-        {
-            var dbSocketDir = "/cloudsql";
-            var connection = new MySqlConnectionStringBuilder()
-            {
-                SslMode = MySqlSslMode.None,
-                Server = String.Format("{0}/{1}", dbSocketDir, instanceConnectionName),
-                UserID = Environment.GetEnvironmentVariable("DB_USER"),
-                Password = Environment.GetEnvironmentVariable("DB_PASS"),
-                Database = Environment.GetEnvironmentVariable("DB_NAME"),
-                ConnectionProtocol = MySqlConnectionProtocol.UnixSocket,
-                Pooling = true,
-            };
+        var dbSocketDir = "/cloudsql";
 
-            var connectionString = connection.ConnectionString;
-            var version = ServerVersion.AutoDetect(connectionString);
-
-            optionsBuilder
-                .UseMySql(connectionString, version)
-                .LogTo(Console.WriteLine);
-        }
-        else
+        var connection = instanceConnectionName is null
+        ? new MySqlConnectionStringBuilder()
         {
-            optionsBuilder
-                .UseSqlite("Data Source=FlightAgency.db")
-                .LogTo(Console.WriteLine)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors();
+            SslMode = MySqlSslMode.None,
+            Server = Environment.GetEnvironmentVariable("DB_HOST"),
+            UserID = Environment.GetEnvironmentVariable("DB_USER"),
+            Password = Environment.GetEnvironmentVariable("DB_PASS"),
+            Database = Environment.GetEnvironmentVariable("DB_NAME"),
+            ConnectionProtocol = MySqlConnectionProtocol.Tcp,
+            Pooling = true,
         }
+        : new MySqlConnectionStringBuilder()
+        {
+            SslMode = MySqlSslMode.None,
+            Server = String.Format("{0}/{1}", dbSocketDir, instanceConnectionName),
+            UserID = Environment.GetEnvironmentVariable("DB_USER"),
+            Password = Environment.GetEnvironmentVariable("DB_PASS"),
+            Database = Environment.GetEnvironmentVariable("DB_NAME"),
+            ConnectionProtocol = MySqlConnectionProtocol.UnixSocket,
+            Pooling = true,
+        };
+
+        var connectionString = connection.ConnectionString;
+        var version = ServerVersion.AutoDetect(connectionString);
+
+        optionsBuilder
+            .UseMySql(connectionString, version)
+            .LogTo(Console.WriteLine);
     }
 }

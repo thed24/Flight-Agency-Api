@@ -5,8 +5,6 @@ namespace FlightAgency.Infrastructure;
 
 public class Stop
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Key]
     public int Id { get; set; }
     public string Name { get; set; }
     public Location Location { get; set; }
