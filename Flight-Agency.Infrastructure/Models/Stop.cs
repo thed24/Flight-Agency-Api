@@ -1,7 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace FlightAgency.Infrastructure;
 
 public class Stop
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
     public int Id { get; set; }
     public string Name { get; set; }
     public Location Location { get; set; }
@@ -13,23 +18,4 @@ public class Stop
     {
 
     }
-}
-
-public record Location(int Id, double Latitude, double Longitude);
-public record DateRange(int Id, DateTime Start, DateTime End);
-public enum Category
-{
-    Accommodation,
-    Food,
-    Transport,
-    Shopping,
-    Entertainment,
-    Bars,
-    Restaurants,
-    Cafes,
-    Nightlife,
-    Museums,
-    Parks,
-    Theatre,
-    Art,
 }
