@@ -6,13 +6,8 @@ using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var context = new UserContext();
-
-context.Database.Migrate();
 
 builder.Services.AddControllers();
 builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
@@ -21,10 +16,12 @@ builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
     .AllowAnyHeader())
 );
 
-builder.Services.AddSingleton(context);
-builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
-builder.Services.AddSingleton<ITripsHandler, TripsHandler>();
-builder.Services.AddSingleton<IPlacesHandler, PlacesHandler>();
+builder.Services.AddDbContext<UserContext>();
+builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();
+builder.Services.AddTransient<ITripsHandler, TripsHandler>();
+builder.Services.AddTransient<IPlacesHandler, PlacesHandler>();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -87,6 +84,7 @@ app.MapPost("api/places/suggest", async (
     [FromServices] IPlacesHandler placesHandler,
     [FromBody] Trip trip) => await placesHandler.GetSuggestion(trip));
 
+// middleware
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://+:{port}");
 

@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="1.8.0" />
     <PackageReference Include="GoogleMapsApi" Version="1.2.0" />
     <PackageReference Include="LanguageExt.Core" Version="4.0.4" />
   </ItemGroup>
