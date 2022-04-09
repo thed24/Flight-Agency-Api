@@ -20,12 +20,10 @@ public interface IPlacesHandler
 public class PlacesHandler : IPlacesHandler
 {
     public UserContext UserContext;
-    public MemoryCache Cache;
 
-    public PlacesHandler(UserContext userContext, MemoryCache memoryCache)
+    public PlacesHandler(UserContext userContext)
     {
         UserContext = userContext;
-        Cache = memoryCache;
     }
 
     public async Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request)

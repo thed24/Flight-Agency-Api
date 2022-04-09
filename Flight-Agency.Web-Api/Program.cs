@@ -21,8 +21,6 @@ builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();
 builder.Services.AddTransient<ITripsHandler, TripsHandler>();
 builder.Services.AddTransient<IPlacesHandler, PlacesHandler>();
 
-builder.Services.AddMemoryCache();
-
 var app = builder.Build();
 
 // auth
