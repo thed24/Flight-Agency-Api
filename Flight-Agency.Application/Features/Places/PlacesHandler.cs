@@ -21,13 +21,27 @@ public class PlacesHandler : IPlacesHandler
 {
     public UserContext UserContext;
 
-    public PlacesHandler(UserContext userContext)
+    public IMemoryCache Cache;
+
+    private string CreatePlaceCacheKey(double lat, double lng) => $"place_{lat}_{lng}";
+    private string CreateAddressCacheKey(double lat, double lng) => $"address_{lat}_{lng}";
+    private string GetApiKey() => Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+
+    public PlacesHandler(UserContext userContext, IMemoryCache memoryCache)
     {
         UserContext = userContext;
+        Cache = memoryCache;
     }
 
     public async Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request)
     {
+        var cacheKeyForRequest = CreatePlaceCacheKey(request.Lat, request.Lng);
+
+        if (Cache.TryGetValue<GetPlacesNearbyResponse>(cacheKeyForRequest, out var places))
+        {
+            return places;
+        }
+
         var newRequest = new PlacesNearByRequest()
         {
             ApiKey = GetApiKey(),
@@ -37,11 +51,21 @@ public class PlacesHandler : IPlacesHandler
         };
 
         var response = await GoogleMaps.PlacesNearBy.QueryAsync(newRequest);
+
+        Cache.Set(cacheKeyForRequest, response, TimeSpan.FromDays(7));
+
         return response.MapToResponse();
     }
 
     public async Task<GetAddressResponse> GetAddressAsync(GetAddressRequest request)
     {
+        var cacheKeyForRequest = CreateAddressCacheKey(request.Lat, request.Lng);
+
+        if (Cache.TryGetValue<GetAddressResponse>(cacheKeyForRequest, out var address))
+        {
+            return address;
+        }
+
         var newRequest = new GeocodingRequest()
         {
             ApiKey = GetApiKey(),
@@ -49,14 +73,19 @@ public class PlacesHandler : IPlacesHandler
         };
 
         var response = await GoogleMaps.Geocode.QueryAsync(newRequest);
+
+        Cache.Set(cacheKeyForRequest, response, TimeSpan.FromDays(7));
+
         return response.MapToResponse();
     }
 
-    public Task<GetSuggestionsResponse> GetSuggestion(Trip trip) =>
-        CalculateStops(trip);
-
-    private async Task<GetSuggestionsResponse> CalculateStops(Trip trip)
+    public async Task<GetSuggestionsResponse> GetSuggestion(Trip trip)
     {
+        if (!trip.Stops.Any())
+        {
+            return new GetSuggestionsResponse(new List<GetPlacesNearbyResponseData>());
+        }
+
         var groupedStops = trip.Stops.GroupBy(stop => stop.Category).OrderBy(group => group.Count()).ToList();
         var randomStop = trip.Stops.First();
 
@@ -93,6 +122,4 @@ public class PlacesHandler : IPlacesHandler
 
         return new GetSuggestionsResponse(data);
     }
-
-    public string GetApiKey() => Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
 }

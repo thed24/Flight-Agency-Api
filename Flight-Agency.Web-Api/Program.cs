@@ -16,6 +16,8 @@ builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
     .AllowAnyHeader())
 );
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddDbContext<UserContext>();
 builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();
 builder.Services.AddTransient<ITripsHandler, TripsHandler>();
