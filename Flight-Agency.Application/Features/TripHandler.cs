@@ -1,8 +1,8 @@
 ﻿using FlightAgency.Application.Common;
 using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Infrastructure;
+using FlightAgency.Models;
 using LanguageExt;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace FlightAgency.Application.Features.Trips.TripHandler;

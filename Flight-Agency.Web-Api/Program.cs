@@ -1,10 +1,11 @@
 using FlightAgency.Application.Features.Authorization.AuthorizationHandler;
-using FlightAgency.Application.Features.Authorization.Requests;
 using FlightAgency.Application.Features.Places.PlacesHandler;
 using FlightAgency.Application.Features.Places.Requests;
 using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Application.Features.Trips.TripHandler;
+using FlightAgency.Contracts.Requests.Authorization;
 using FlightAgency.Infrastructure;
+using FlightAgency.Models;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,16 +27,16 @@ builder.Services.AddTransient<IPlacesHandler, PlacesHandler>();
 var app = builder.Build();
 
 // auth
-app.MapPost("api/auth/login", (
+app.MapPost("api/auth/login", async (
     [FromServices] IAuthorizationHandler authorizationHandler,
-    [FromBody] LoginRequest loginRequest) => authorizationHandler
-        .Login(loginRequest)
+    [FromBody] LoginRequest loginRequest) => (await authorizationHandler
+        .LoginAsync(loginRequest))
         .MapToApiResponse<string, User>());
 
-app.MapPost("api/auth/register", (
+app.MapPost("api/auth/register", async (
     [FromServices] IAuthorizationHandler authorizationHandler,
-    [FromBody] CreateUserRequest createUserRequest) => authorizationHandler
-        .Register(createUserRequest)
+    [FromBody] RegisterRequest registerRequest) => (await authorizationHandler
+        .Register(registerRequest))
         .MapToApiResponse<string, User>());
 
 // trips

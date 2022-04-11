@@ -1,4 +1,4 @@
-﻿using FlightAgency.Infrastructure;
+﻿using FlightAgency.Models;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +6,6 @@ namespace FlightAgency.Application.Common;
 
 public static class UserContextExtensions
 {
-    public static Option<User> FindUserByEmail(this List<User> users, string email) =>
-        users.Find(user => user.Email == email);
-
     public static Option<User> FindUserById(this List<User> users, int id) =>
         users.Find(user => user.Id == id);
 

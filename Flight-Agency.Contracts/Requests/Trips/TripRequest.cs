@@ -1,4 +1,4 @@
-﻿using FlightAgency.Infrastructure;
+﻿using FlightAgency.Models;
 
 namespace FlightAgency.Application.Features.Trips.Requests;
 

@@ -1,10 +1,11 @@
-﻿using FlightAgency.Application.Features.Places.Mappers;
-using FlightAgency.Application.Features.Places.Requests;
-using FlightAgency.Application.Features.Places.Responses;
+﻿using FlightAgency.Application.Features.Places.Requests;
 using FlightAgency.Infrastructure;
+using FlightAgency.Models;
 using GoogleMapsApi;
 using GoogleMapsApi.Entities.Geocoding.Request;
+using GoogleMapsApi.Entities.Geocoding.Response;
 using GoogleMapsApi.Entities.PlacesNearBy.Request;
+using GoogleMapsApi.Entities.PlacesNearBy.Response;
 using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -12,9 +13,9 @@ namespace FlightAgency.Application.Features.Places.PlacesHandler;
 
 public interface IPlacesHandler
 {
-    public Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request);
-    public Task<GetAddressResponse> GetAddressAsync(GetAddressRequest request);
-    public Task<GetSuggestionsResponse> GetSuggestion(Trip trip);
+    public Task<PlacesNearByResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request);
+    public Task<GeocodingResponse> GetAddressAsync(GetAddressRequest request);
+    public Task<PlacesNearByResponse> GetSuggestion(Trip trip);
 }
 
 public class PlacesHandler : IPlacesHandler
@@ -23,9 +24,9 @@ public class PlacesHandler : IPlacesHandler
 
     public IMemoryCache Cache;
 
-    private string CreatePlaceCacheKey(double lat, double lng) => $"place_{lat}_{lng}";
-    private string CreateAddressCacheKey(double lat, double lng) => $"address_{lat}_{lng}";
-    private string GetApiKey() => Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+    private static string CreatePlaceCacheKey(double lat, double lng) => $"place_{lat}_{lng}";
+    private static string CreateAddressCacheKey(double lat, double lng) => $"address_{lat}_{lng}";
+    private static string GetApiKey() => Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
 
     public PlacesHandler(UserContext userContext, IMemoryCache memoryCache)
     {
@@ -33,11 +34,11 @@ public class PlacesHandler : IPlacesHandler
         Cache = memoryCache;
     }
 
-    public async Task<GetPlacesNearbyResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request)
+    public async Task<PlacesNearByResponse> GetPlacesNearbyAsync(GetPlacesNearbyRequest request)
     {
         var cacheKeyForRequest = CreatePlaceCacheKey(request.Lat, request.Lng);
 
-        if (Cache.TryGetValue<GetPlacesNearbyResponse>(cacheKeyForRequest, out var places))
+        if (Cache.TryGetValue<PlacesNearByResponse>(cacheKeyForRequest, out var places))
         {
             return places;
         }
@@ -54,14 +55,14 @@ public class PlacesHandler : IPlacesHandler
 
         Cache.Set(cacheKeyForRequest, response, TimeSpan.FromDays(7));
 
-        return response.MapToResponse();
+        return response;
     }
 
-    public async Task<GetAddressResponse> GetAddressAsync(GetAddressRequest request)
+    public async Task<GeocodingResponse> GetAddressAsync(GetAddressRequest request)
     {
         var cacheKeyForRequest = CreateAddressCacheKey(request.Lat, request.Lng);
 
-        if (Cache.TryGetValue<GetAddressResponse>(cacheKeyForRequest, out var address))
+        if (Cache.TryGetValue<GeocodingResponse>(cacheKeyForRequest, out var address))
         {
             return address;
         }
@@ -76,14 +77,14 @@ public class PlacesHandler : IPlacesHandler
 
         Cache.Set(cacheKeyForRequest, response, TimeSpan.FromDays(7));
 
-        return response.MapToResponse();
+        return response;
     }
 
-    public async Task<GetSuggestionsResponse> GetSuggestion(Trip trip)
+    public async Task<PlacesNearByResponse> GetSuggestion(Trip trip)
     {
         if (!trip.Stops.Any())
         {
-            return new GetSuggestionsResponse(new List<GetPlacesNearbyResponseData>());
+            return new PlacesNearByResponse();
         }
 
         var groupedStops = trip.Stops.GroupBy(stop => stop.Category).OrderBy(group => group.Count()).ToList();
@@ -115,11 +116,15 @@ public class PlacesHandler : IPlacesHandler
 
         var output = await Task.WhenAll(suggestions);
         var data = output
-            .Select(x => x.MapToResponse())
             .Select(x => x.Results)
             .SelectMany(x => x)
             .Select(x => x);
 
-        return new GetSuggestionsResponse(data);
+        var response = new PlacesNearByResponse
+        {
+            Results = data
+        };
+
+        return response;
     }
 }

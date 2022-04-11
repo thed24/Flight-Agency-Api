@@ -1,4 +1,4 @@
-namespace FlightAgency.Infrastructure;
+namespace FlightAgency.Models;
 
 public enum Category
 {

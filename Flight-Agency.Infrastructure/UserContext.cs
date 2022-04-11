@@ -1,6 +1,7 @@
-using FlightAgency.Infrastructure;
+namespace FlightAgency.Infrastructure;
+
+using FlightAgency.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 
 public class UserContext : DbContext
