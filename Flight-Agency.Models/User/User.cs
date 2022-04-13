@@ -13,4 +13,10 @@ public class User
         Password = password;
         Name = name;
     }
+    public User AddTrip(Trip trip)
+    {
+        var newUser = new User(Email, Password, Name);
+        newUser.Trips.Add(trip);
+        return newUser;
+    }
 }

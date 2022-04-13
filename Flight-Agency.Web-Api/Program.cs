@@ -36,28 +36,20 @@ app.MapPost("api/auth/login", async (
 app.MapPost("api/auth/register", async (
     [FromServices] IAuthorizationHandler authorizationHandler,
     [FromBody] RegisterRequest registerRequest) => (await authorizationHandler
-        .Register(registerRequest))
+        .RegisterAsync(registerRequest))
         .MapToApiResponse<string, User>());
 
 // trips
-app.MapPost("api/users/{userId}/trips", (
+app.MapPost("api/users/{userId}/trips", async (
     [FromServices] ITripsHandler tripHandler,
     [FromBody] CreateTripRequest createTripRequest,
-    [FromRoute] int userId) => tripHandler
-        .CreateTrip(userId, createTripRequest)
-        .MapToApiResponse<string, Trip>());
+    [FromRoute] int userId) => (await tripHandler
+        .CreateTrip(userId, createTripRequest))
+        .MapToApiResponse<string, User>());
 
-app.MapGet("api/users/{userId}/trips", (
+app.MapGet("api/users/{userId}/trips", async (
     [FromServices] ITripsHandler tripHandler,
-    [FromRoute] int userId) => tripHandler
-        .GetTrips(userId)
-        .MapToApiResponse<string, List<Trip>>());
-
-app.MapPut("api/users/{userId}/trips", (
-    [FromServices] ITripsHandler tripHandler,
-    [FromBody] UpdateTripRequest updateTripRequest) => tripHandler
-        .UpdateTrip(updateTripRequest)
-        .MapToApiResponse<string, Trip>());
+    [FromRoute] int userId) => await tripHandler.GetTrips(userId));
 
 // places
 app.MapGet("api/places/nearBy", async (

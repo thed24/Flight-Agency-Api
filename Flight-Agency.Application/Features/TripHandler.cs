@@ -1,17 +1,17 @@
 ﻿using FlightAgency.Application.Common;
 using FlightAgency.Application.Features.Trips.Requests;
+using FlightAgency.Domain;
 using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlightAgency.Application.Features.Trips.TripHandler;
 
 public interface ITripsHandler
 {
-    Either<string, Trip> CreateTrip(int userId, CreateTripRequest createTripRequest);
-    Either<string, Trip> UpdateTrip(UpdateTripRequest updateTripRequest);
-    Either<string, List<Trip>> GetTrips(int userId);
+    Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest);
+    Task<List<Trip>> GetTrips(int userId);
 }
 
 public class TripsHandler : ITripsHandler
@@ -23,47 +23,25 @@ public class TripsHandler : ITripsHandler
         UserContext = userContext;
     }
 
-    public Either<string, Trip> CreateTrip(int userId, CreateTripRequest request) =>
-        UserContext
-            .Users
-            .IncludeAll()
-            .FindUserById(userId)
-            .Match<Either<string, User>>(None: () => "User not found.",
-                                         Some: (user) =>
-                                         {
-                                             user.Trips.Add(new Trip(request.Destination, request.Stops));
-                                             return user;
-                                         })
-            .Bind<User>(user => PersistUser(user, UserContext.Users.Update))
-            .Bind<Trip>(user => user.Trips.Last());
-
-    public Either<string, List<Trip>> GetTrips(int userId) =>
-        UserContext
-            .Users
-            .IncludeAll()
-            .FindUserById(userId)
-            .Match<Either<string, List<Trip>>>(None: () => "User not found.",
-                                               Some: (user) => user.Trips);
-
-    public Either<string, Trip> UpdateTrip(UpdateTripRequest request) =>
-        UserContext
-            .Trips
-            .Find(trip => trip.Id == request.Id)
-            .Match<Either<string, Trip>>(None: () => "User not found.",
-                                         Some: (_) => new Trip(request.Name, request.Stops, request.Id))
-            .Bind<Trip>(trip => PersistTrip(trip, UserContext.Trips.Update));
-
-    public Trip PersistTrip(Trip trip, Func<Trip, EntityEntry<Trip>> sideEffectFunc)
+    public async Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest)
     {
-        sideEffectFunc(trip);
-        UserContext.SaveChanges();
-        return trip;
+        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
+        var trip = new Trip() { Destination = createTripRequest.Destination, Stops = createTripRequest.Stops };
+        var result = UserAggregateRoot.AddTrip(userId, users, trip);
+
+        if (result.IsOk)
+        {
+            var user = result.ResultValue;
+            await UserContext.Users.AddAsync(user);
+            await UserContext.SaveChangesAsync();
+        }
+
+        return result.ToEither();
     }
 
-    public User PersistUser(User user, Func<User, EntityEntry<User>> sideEffectFunc)
+    public async Task<List<Trip>> GetTrips(int userId)
     {
-        sideEffectFunc(user);
-        UserContext.SaveChanges();
-        return user;
+        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
+        return UserAggregateRoot.GetTrips(userId, users).ToList();
     }
 }
