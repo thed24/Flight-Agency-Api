@@ -40,6 +40,7 @@ public class UserContext : DbContext
         };
 
         var connectionString = connection.ConnectionString;
+        Console.WriteLine(connectionString);
         var version = ServerVersion.AutoDetect(connectionString);
 
         optionsBuilder

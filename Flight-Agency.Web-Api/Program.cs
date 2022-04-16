@@ -16,8 +16,6 @@ builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();
 builder.Services.AddTransient<ITripsHandler, TripsHandler>();
 
 var app = builder.Build();
-
-// middleware
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://+:{port}");
 
@@ -25,4 +23,5 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 await app.RunAsync();
