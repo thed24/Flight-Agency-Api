@@ -26,14 +26,14 @@ public class AuthorizationHandler : IAuthorizationHandler
     public async Task<Either<string, User>> LoginAsync(LoginRequest request)
     {
         var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        var result = UserAggregateRoot.Login(request.email, request.password, users);
+        var result = UserAggregateRoot.Login(request.Email, request.Password, users);
         return result.ToEither();
     }
 
     public async Task<Either<string, User>> RegisterAsync(RegisterRequest request)
     {
         var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        var result = UserAggregateRoot.Register(request.email, request.name, request.password, users);
+        var result = UserAggregateRoot.Register(request.Email, request.Name, request.Password, users);
 
         if (result.IsOk)
         {

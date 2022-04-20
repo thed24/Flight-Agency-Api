@@ -3,6 +3,8 @@ using FlightAgency.Contracts.Requests.Authorization;
 using FlightAgency.Models;
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
+[Route("/api/auth")]
 public class AuthorizationController
 {
     public IAuthorizationHandler AuthorizationHandler { get; }
@@ -12,15 +14,19 @@ public class AuthorizationController
         AuthorizationHandler = authorizationHandler;
     }
 
-    [HttpPost("api/auth/login")]
-    public async Task<IResult> Login(LoginRequest loginRequest)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        return (await AuthorizationHandler.LoginAsync(loginRequest)).MapToApiResponse<string, User>();
+        return (await AuthorizationHandler
+            .LoginAsync(loginRequest))
+            .MapToApiResponse<string, User>();
     }
 
-    [HttpPost("api/auth/register")]
-    public async Task<IResult> Register(RegisterRequest registerRequest)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
     {
-        return (await AuthorizationHandler.RegisterAsync(registerRequest)).MapToApiResponse<string, User>();
+        return (await AuthorizationHandler
+            .RegisterAsync(registerRequest))
+            .MapToApiResponse<string, User>();
     }
 }

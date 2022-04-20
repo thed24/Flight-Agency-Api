@@ -3,6 +3,8 @@ using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Models;
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
+[Route("/api/users")]
 public class UserController
 {
     public ITripsHandler TripsHandler { get; }
@@ -11,15 +13,18 @@ public class UserController
         TripsHandler = tripsHandler;
     }
 
-    [HttpPost("api/users/{userId}/trips")]
-    public async Task<IResult> CreateTrip(int userId, CreateTripRequest createTripRequest)
+    [HttpPost("{userId}/trips")]
+    public async Task<IActionResult> CreateTrip([FromRoute] int userId, [FromBody] CreateTripRequest createTripRequest)
     {
-        return (await TripsHandler.CreateTrip(userId, createTripRequest)).MapToApiResponse<string, User>();
+        return (await TripsHandler
+            .CreateTrip(userId, createTripRequest))
+            .MapToApiResponse<string, User>();
     }
 
-    [HttpGet("api/users/{userId}/trips")]
-    public async Task<IResult> GetTrips(int userId)
+    [HttpGet("{userId}/trips")]
+    public async Task<IActionResult> GetTrips([FromRoute] int userId)
     {
-        return Results.Ok(await TripsHandler.GetTrips(userId));
+        return new OkObjectResult(await TripsHandler
+            .GetTrips(userId));
     }
 }

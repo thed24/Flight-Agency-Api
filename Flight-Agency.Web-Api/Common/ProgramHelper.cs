@@ -1,9 +1,10 @@
 using LanguageExt;
+using Microsoft.AspNetCore.Mvc;
 
 public static class ProgramHelper
 {
-    public static IResult MapToApiResponse<E, R>(this Either<E, R> either) => either.Match(
-            Left: (error) => Results.BadRequest(error),
-            Right: (result) => Results.Ok(result)
+    public static IActionResult MapToApiResponse<E, R>(this Either<E, R> either) => either.Match<IActionResult>(
+            Left: (error) => new BadRequestObjectResult(error),
+            Right: (result) => new OkObjectResult(result)
         );
 }

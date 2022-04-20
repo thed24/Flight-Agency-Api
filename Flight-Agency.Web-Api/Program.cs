@@ -21,7 +21,6 @@ app.Urls.Add($"http://+:{port}");
 
 app.UseCors();
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
-await app.RunAsync();
+app.Run();

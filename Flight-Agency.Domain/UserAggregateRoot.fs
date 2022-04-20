@@ -11,7 +11,9 @@ module public UserAggregateRoot =
         let user = Parser.ByEmail email existingUsers
         let result = match user with
                         | None -> Error "User not found."
-                        | Some user -> if user.Password.Equals(password) then Ok user else Error "Invalid password."
+                        | Some user -> if user.Password.Equals(password) 
+                                                then Ok user 
+                                                else Error "Invalid password."
         result
 
     let Register(email: string, name: string, password: string, existingUsers: List<User>): Result<User, string> = 
