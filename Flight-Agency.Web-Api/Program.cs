@@ -1,6 +1,7 @@
 using FlightAgency.Application.Features.Authorization.AuthorizationHandler;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

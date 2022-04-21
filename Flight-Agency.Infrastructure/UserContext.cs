@@ -2,7 +2,6 @@ namespace FlightAgency.Infrastructure;
 
 using FlightAgency.Models;
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 
 public class UserContext : DbContext
 {
@@ -14,37 +13,17 @@ public class UserContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var instanceConnectionName = Environment.GetEnvironmentVariable("INSTANCE_CONNECTION_NAME");
-        var dbSocketDir = "/cloudsql";
+        var database = Environment.GetEnvironmentVariable("DB_NAME");
+        var user = Environment.GetEnvironmentVariable("DB_USER");
+        var password = Environment.GetEnvironmentVariable("DB_PASS");
+        var host = Environment.GetEnvironmentVariable("DB_HOST");
 
-        var connection = instanceConnectionName is null
-        ? new MySqlConnectionStringBuilder()
-        {
-            SslMode = MySqlSslMode.None,
-            Server = Environment.GetEnvironmentVariable("DB_HOST"),
-            UserID = Environment.GetEnvironmentVariable("DB_USER"),
-            Password = Environment.GetEnvironmentVariable("DB_PASS"),
-            Database = Environment.GetEnvironmentVariable("DB_NAME"),
-            ConnectionProtocol = MySqlConnectionProtocol.Tcp,
-            Pooling = true,
-        }
-        : new MySqlConnectionStringBuilder()
-        {
-            SslMode = MySqlSslMode.None,
-            Server = String.Format("{0}/{1}", dbSocketDir, instanceConnectionName),
-            UserID = Environment.GetEnvironmentVariable("DB_USER"),
-            Password = Environment.GetEnvironmentVariable("DB_PASS"),
-            Database = Environment.GetEnvironmentVariable("DB_NAME"),
-            ConnectionProtocol = MySqlConnectionProtocol.UnixSocket,
-            Pooling = true,
-        };
+        var connectionString = $"Host={host};Username={user};Password={password};Database={database}";
 
-        var connectionString = connection.ConnectionString;
         Console.WriteLine(connectionString);
-        var version = ServerVersion.AutoDetect(connectionString);
 
         optionsBuilder
-            .UseMySql(connectionString, version)
+            .UseNpgsql(connectionString)
             .LogTo(Console.WriteLine);
     }
 }

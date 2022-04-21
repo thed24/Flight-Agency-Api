@@ -4,6 +4,7 @@ using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,68 +17,76 @@ namespace FlightAgency.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "7.0.0-preview.3.22175.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.DateRange", b =>
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("FlightAgency.Models.DateRange", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Start")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dates", (string)null);
+                    b.ToTable("Dates");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Location", b =>
+            modelBuilder.Entity("FlightAgency.Models.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Latitude")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Longitude")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
+            modelBuilder.Entity("FlightAgency.Models.Stop", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("Category")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LocationId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("TimeId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("TripId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -87,67 +96,71 @@ namespace FlightAgency.Infrastructure.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("Stops", (string)null);
+                    b.ToTable("Stops");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Models.Trip", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Destination")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.User", b =>
+            modelBuilder.Entity("FlightAgency.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Stop", b =>
+            modelBuilder.Entity("FlightAgency.Models.Stop", b =>
                 {
-                    b.HasOne("FlightAgency.Infrastructure.Location", "Location")
+                    b.HasOne("FlightAgency.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlightAgency.Infrastructure.DateRange", "Time")
+                    b.HasOne("FlightAgency.Models.DateRange", "Time")
                         .WithMany()
                         .HasForeignKey("TimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlightAgency.Infrastructure.Trip", null)
+                    b.HasOne("FlightAgency.Models.Trip", null)
                         .WithMany("Stops")
                         .HasForeignKey("TripId");
 
@@ -156,19 +169,19 @@ namespace FlightAgency.Infrastructure.Migrations
                     b.Navigation("Time");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Models.Trip", b =>
                 {
-                    b.HasOne("FlightAgency.Infrastructure.User", null)
+                    b.HasOne("FlightAgency.Models.User", null)
                         .WithMany("Trips")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.Trip", b =>
+            modelBuilder.Entity("FlightAgency.Models.Trip", b =>
                 {
                     b.Navigation("Stops");
                 });
 
-            modelBuilder.Entity("FlightAgency.Infrastructure.User", b =>
+            modelBuilder.Entity("FlightAgency.Models.User", b =>
                 {
                     b.Navigation("Trips");
                 });
