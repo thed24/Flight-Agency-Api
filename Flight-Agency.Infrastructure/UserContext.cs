@@ -19,11 +19,6 @@ public class UserContext : DbContext
         var host = Environment.GetEnvironmentVariable("DB_HOST");
 
         var connectionString = $"Host={host};Username={user};Password={password};Database={database}";
-
-        Console.WriteLine(connectionString);
-
-        optionsBuilder
-            .UseNpgsql(connectionString)
-            .LogTo(Console.WriteLine);
+        optionsBuilder.UseNpgsql(connectionString);
     }
 }
