@@ -1,7 +1,5 @@
 ﻿
-using FlightAgency.Application.Common;
 using FlightAgency.Contracts.Requests.Authorization;
-using FlightAgency.Domain;
 using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
@@ -25,23 +23,34 @@ public class AuthorizationHandler : IAuthorizationHandler
 
     public async Task<Either<string, User>> LoginAsync(LoginRequest request)
     {
-        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        var result = UserAggregateRoot.Login(request.Email, request.Password, users);
-        return result.ToEither();
+        var user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        if (user is null)
+        {
+            return Prelude.Left<string, User>("User not found.");
+        }
+
+        if (!user.Password.Equals(request.Password))
+        {
+            return Prelude.Left<string, User>("Password is incorrect.");
+        }
+
+        return Prelude.Right<string, User>(user);
     }
 
     public async Task<Either<string, User>> RegisterAsync(RegisterRequest request)
     {
-        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        var result = UserAggregateRoot.Register(request.Email, request.Name, request.Password, users);
+        var user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
 
-        if (result.IsOk)
+        if (user != null)
         {
-            var user = result.ResultValue;
-            await UserContext.Users.AddAsync(user);
-            await UserContext.SaveChangesAsync();
+            return Prelude.Left<string, User>("User already exists.");
         }
 
-        return result.ToEither();
+        var newUser = new User(request.Email, request.Name, request.Password);
+        await UserContext.Users.AddAsync(newUser);
+        await UserContext.SaveChangesAsync();
+
+        return Prelude.Right<string, User>(newUser);
     }
 }

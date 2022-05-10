@@ -1,11 +1,7 @@
-﻿using FlightAgency.Application.Common;
-using FlightAgency.Application.Features.Trips.Requests;
-using FlightAgency.Domain;
+﻿using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace FlightAgency.Application.Features.Trips.TripHandler;
 
@@ -26,23 +22,33 @@ public class TripsHandler : ITripsHandler
 
     public async Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest)
     {
-        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        var trip = new Trip() { Destination = createTripRequest.Destination, Stops = createTripRequest.Stops };
-        var result = UserAggregateRoot.AddTrip(userId, users, trip);
+        var stops = createTripRequest.Stops.Select(s => new Stop(0, s.Name, s.Time, s.Address, s.Location, s.Category));
+        var trip = new Trip(createTripRequest.Destination, stops);
+        var user = (await UserContext.Users.IncludeAllAsync()).FirstOrDefault(user => user.Id == userId);
 
-        if (result.IsOk)
+        if (user is null)
         {
-            var user = result.ResultValue;
-            await UserContext.Users.AddAsync(user);
-            await UserContext.SaveChangesAsync();
+            Console.WriteLine($"User {userId} was not found.");
+            return Prelude.Left<string, User>("User not found.");
         }
 
-        return result.ToEither();
+        user.Trips.Add(trip);
+        UserContext.Users.Update(user);
+        await UserContext.SaveChangesAsync();
+
+        return Prelude.Right<string, User>(user);
     }
 
     public async Task<List<Trip>> GetTrips(int userId)
     {
-        var users = (await UserContext.Users.ToListAsync()).ToFSharpList();
-        return UserAggregateRoot.GetTrips(userId, users).ToList();
+        var user = (await UserContext.Users.IncludeAllAsync()).FirstOrDefault(user => user.Id == userId);
+
+        if (user is null)
+        {
+            Console.WriteLine($"User {userId} was not found.");
+            return new List<Trip>();
+        }
+
+        return user.Trips;
     }
 }
