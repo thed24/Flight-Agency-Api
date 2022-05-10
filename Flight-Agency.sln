@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flight-Agency.Models", "Fli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flight-Agency.Contracts", "Flight-Agency.Contracts\Flight-Agency.Contracts.csproj", "{9E586D62-616B-4EDC-90C9-EA84D62AEC99}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Flight-Agency.Domain", "Flight-Agency.Domain\Flight-Agency.Domain.fsproj", "{58F62D7F-E113-469C-BB53-C26AD6026E15}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
