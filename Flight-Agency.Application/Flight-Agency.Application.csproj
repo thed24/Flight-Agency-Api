@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Flight-Agency.Contracts\Flight-Agency.Contracts.csproj" />
-    <ProjectReference Include="..\Flight-Agency.Domain\Flight-Agency.Domain.fsproj" />
     <ProjectReference Include="..\Flight-Agency.Models\Flight-Agency.Models.csproj" />
     <ProjectReference Include="..\Flight-Agency.Infrastructure\Flight-Agency.Infrastructure.csproj" />
   </ItemGroup>

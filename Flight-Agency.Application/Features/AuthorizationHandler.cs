@@ -1,5 +1,4 @@
-﻿
-using FlightAgency.Contracts.Requests.Authorization;
+﻿using FlightAgency.Contracts.Requests.Authorization;
 using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
@@ -47,7 +46,13 @@ public class AuthorizationHandler : IAuthorizationHandler
             return Prelude.Left<string, User>("User already exists.");
         }
 
-        var newUser = new User(request.Email, request.Name, request.Password);
+        var newUser = new User()
+        {
+            Email = request.Email,
+            Name = request.Name,
+            Password = request.Password
+        }
+;
         await UserContext.Users.AddAsync(newUser);
         await UserContext.SaveChangesAsync();
 

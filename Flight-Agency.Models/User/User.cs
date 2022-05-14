@@ -2,16 +2,9 @@
 
 public class User
 {
-    public int Id { get; private set; }
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-    public string Password { get; private set; }
-    public List<Trip> Trips { get; private set; } = new List<Trip>();
-
-    public User(string email, string name, string password)
-    {
-        Email = email;
-        Password = password;
-        Name = name;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public List<Trip> Trips { get; set; }
 }

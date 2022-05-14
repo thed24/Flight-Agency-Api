@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FlightAgency.Application.Features.Authorization.AuthorizationHandler;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
@@ -5,12 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddCors(service => service.AddDefaultPolicy(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader())
 );
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 builder.Services.AddDbContext<UserContext>();
 builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();

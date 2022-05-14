@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 public static class UserContextExtensions
 {
-    public static async Task<List<User>> IncludeAllAsync(this DbSet<User> users) => await users
+    public static IQueryable<User> IncludeAllAsync(this DbSet<User> users) => users
         .Include(u => u.Trips)
             .ThenInclude(t => t.Stops)
                 .ThenInclude(s => s.Time)
         .Include(u => u.Trips)
             .ThenInclude(t => t.Stops)
                 .ThenInclude(s => s.Location)
-        .ToListAsync();
+        .AsQueryable();
 }

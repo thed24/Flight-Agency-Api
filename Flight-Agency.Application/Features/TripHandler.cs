@@ -8,7 +8,7 @@ namespace FlightAgency.Application.Features.Trips.TripHandler;
 public interface ITripsHandler
 {
     Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest);
-    Task<List<Trip>> GetTrips(int userId);
+    List<Trip> GetTrips(int userId);
 }
 
 public class TripsHandler : ITripsHandler
@@ -22,26 +22,38 @@ public class TripsHandler : ITripsHandler
 
     public async Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest)
     {
-        var stops = createTripRequest.Stops.Select(s => new Stop(0, s.Name, s.Time, s.Address, s.Location, s.Category));
-        var trip = new Trip(createTripRequest.Destination, stops);
-        var user = (await UserContext.Users.IncludeAllAsync()).FirstOrDefault(user => user.Id == userId);
+        var user = UserContext.Users.IncludeAllAsync().Single(user => user.Id == userId);
 
-        if (user is null)
+        if (user == null)
         {
             Console.WriteLine($"User {userId} was not found.");
             return Prelude.Left<string, User>("User not found.");
         }
 
+        var stops = createTripRequest.Stops.Select(stop => new Stop()
+        {
+            Name = stop.Name,
+            Location = stop.Location,
+            Time = stop.Time,
+            Address = stop.Address,
+            Category = stop.Category
+        }).ToList();
+
+        var trip = new Trip()
+        {
+            Destination = createTripRequest.Destination,
+            Stops = stops
+        };
+
         user.Trips.Add(trip);
-        UserContext.Users.Update(user);
         await UserContext.SaveChangesAsync();
 
         return Prelude.Right<string, User>(user);
     }
 
-    public async Task<List<Trip>> GetTrips(int userId)
+    public List<Trip> GetTrips(int userId)
     {
-        var user = (await UserContext.Users.IncludeAllAsync()).FirstOrDefault(user => user.Id == userId);
+        var user = UserContext.Users.IncludeAllAsync().FirstOrDefault(user => user.Id == userId);
 
         if (user is null)
         {

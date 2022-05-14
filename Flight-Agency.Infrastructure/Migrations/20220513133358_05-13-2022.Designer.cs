@@ -3,6 +3,7 @@ using System;
 using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlightAgency.Infrastructure.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20220513133358_05-13-2022")]
+    partial class _05132022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace FlightAgency.Infrastructure.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("Stops", (string)null);
+                    b.ToTable("Stops");
                 });
 
             modelBuilder.Entity("FlightAgency.Models.Trip", b =>
@@ -70,7 +73,7 @@ namespace FlightAgency.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("FlightAgency.Models.User", b =>
@@ -95,7 +98,7 @@ namespace FlightAgency.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FlightAgency.Models.Stop", b =>
@@ -104,29 +107,7 @@ namespace FlightAgency.Infrastructure.Migrations
                         .WithMany("Stops")
                         .HasForeignKey("TripId");
 
-                    b.OwnsOne("FlightAgency.Models.Stop.Location#FlightAgency.Models.Location", "Location", b1 =>
-                        {
-                            b1.Property<int>("StopId")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("Id")
-                                .HasColumnType("integer");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("double precision");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("double precision");
-
-                            b1.HasKey("StopId");
-
-                            b1.ToTable("Locations", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("StopId");
-                        });
-
-                    b.OwnsOne("FlightAgency.Models.Stop.Time#FlightAgency.Models.DateRange", "Time", b1 =>
+                    b.OwnsOne("FlightAgency.Models.DateRange", "Time", b1 =>
                         {
                             b1.Property<int>("StopId")
                                 .HasColumnType("integer");
@@ -142,7 +123,29 @@ namespace FlightAgency.Infrastructure.Migrations
 
                             b1.HasKey("StopId");
 
-                            b1.ToTable("Dates", (string)null);
+                            b1.ToTable("Dates");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StopId");
+                        });
+
+                    b.OwnsOne("FlightAgency.Models.Location", "Location", b1 =>
+                        {
+                            b1.Property<int>("StopId")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Id")
+                                .HasColumnType("integer");
+
+                            b1.Property<double>("Latitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("Longitude")
+                                .HasColumnType("double precision");
+
+                            b1.HasKey("StopId");
+
+                            b1.ToTable("Locations");
 
                             b1.WithOwner()
                                 .HasForeignKey("StopId");

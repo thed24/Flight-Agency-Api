@@ -1,5 +1,6 @@
 namespace FlightAgency.Infrastructure;
 
+using System.Reflection;
 using FlightAgency.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,10 @@ public class UserContext : DbContext
 
         var connectionString = $"Host={host};Username={user};Password={password};Database={database}";
         optionsBuilder.UseNpgsql(connectionString);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
