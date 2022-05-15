@@ -2,6 +2,7 @@
 using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace FlightAgency.Application.Features.Trips.TripHandler;
 
@@ -13,11 +14,13 @@ public interface ITripsHandler
 
 public class TripsHandler : ITripsHandler
 {
-    public UserContext UserContext;
+    private readonly UserContext UserContext;
+    private readonly ILogger<TripsHandler> Logger;
 
-    public TripsHandler(UserContext userContext)
+    public TripsHandler(UserContext userContext, ILogger<TripsHandler> logger)
     {
         UserContext = userContext;
+        Logger = logger;
     }
 
     public async Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest)
@@ -26,7 +29,7 @@ public class TripsHandler : ITripsHandler
 
         if (user == null)
         {
-            Console.WriteLine($"User {userId} was not found.");
+            Logger.LogWarning($"User with id {userId} was not found.");
             return Prelude.Left<string, User>("User not found.");
         }
 
@@ -57,7 +60,7 @@ public class TripsHandler : ITripsHandler
 
         if (user is null)
         {
-            Console.WriteLine($"User {userId} was not found.");
+            Logger.LogWarning($"User with id {userId} was not found.");
             return new List<Trip>();
         }
 

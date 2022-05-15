@@ -3,6 +3,7 @@ using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FlightAgency.Application.Features.Authorization.AuthorizationHandler;
 
@@ -14,10 +15,13 @@ public interface IAuthorizationHandler
 
 public class AuthorizationHandler : IAuthorizationHandler
 {
-    public UserContext UserContext;
-    public AuthorizationHandler(UserContext userContext)
+    private readonly UserContext UserContext;
+    private readonly ILogger<AuthorizationHandler> Logger;
+
+    public AuthorizationHandler(UserContext userContext, ILogger<AuthorizationHandler> logger)
     {
         UserContext = userContext;
+        Logger = logger;
     }
 
     public async Task<Either<string, User>> LoginAsync(LoginRequest request)
@@ -26,11 +30,13 @@ public class AuthorizationHandler : IAuthorizationHandler
 
         if (user is null)
         {
+            Logger.LogWarning($"User with email {request.Email} was not found.");
             return Prelude.Left<string, User>("User not found.");
         }
 
         if (!user.Password.Equals(request.Password))
         {
+            Logger.LogWarning($"User {user.Email} failed to login.");
             return Prelude.Left<string, User>("Password is incorrect.");
         }
 
@@ -43,6 +49,7 @@ public class AuthorizationHandler : IAuthorizationHandler
 
         if (user != null)
         {
+            Logger.LogWarning($"User with email {request.Email} already exists.");
             return Prelude.Left<string, User>("User already exists.");
         }
 
@@ -51,8 +58,8 @@ public class AuthorizationHandler : IAuthorizationHandler
             Email = request.Email,
             Name = request.Name,
             Password = request.Password
-        }
-;
+        };
+
         await UserContext.Users.AddAsync(newUser);
         await UserContext.SaveChangesAsync();
 
