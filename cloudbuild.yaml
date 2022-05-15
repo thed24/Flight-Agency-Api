@@ -30,7 +30,6 @@ steps:
       - --update-secrets=DB_PASS=db_pass:latest
       - --update-secrets=DB_NAME=db_name:latest
       - --update-secrets=DB_HOST=db_name:latest
-      - --update-env-vars=ASPNETCORE_ENVIRONMENT=production
       - "--quiet"
     id: Deploy
     entrypoint: gcloud
