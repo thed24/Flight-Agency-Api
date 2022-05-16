@@ -29,7 +29,7 @@ steps:
       - --update-secrets=DB_USER=db_username:latest
       - --update-secrets=DB_PASS=db_pass:latest
       - --update-secrets=DB_NAME=db_name:latest
-      - --update-secrets=DB_HOST=db_name:latest
+      - --update-secrets=DB_HOST=db_host:latest
       - "--quiet"
     id: Deploy
     entrypoint: gcloud
