@@ -1,0 +1,7 @@
+{
+  "azureFunctions.projectSubpath": "Flight-Agency\\Flight-Agency-Api",
+  "azureFunctions.deploySubpath": "Flight-Agency\\Flight-Agency-Api/bin/Release/net6.0/publish",
+  "azureFunctions.projectLanguage": "C#",
+  "azureFunctions.projectRuntime": "~4",
+  "azureFunctions.preDeployTask": "publish (functions)"
+}

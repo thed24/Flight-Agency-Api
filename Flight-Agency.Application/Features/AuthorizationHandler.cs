@@ -4,6 +4,7 @@ using FlightAgency.Models;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace FlightAgency.Application.Features.Authorization.AuthorizationHandler;
 
@@ -16,7 +17,7 @@ public interface IAuthorizationHandler
 public class AuthorizationHandler : IAuthorizationHandler
 {
     private readonly UserContext UserContext;
-    private readonly ILogger<AuthorizationHandler> Logger;
+    private readonly ILogger Logger;
 
     public AuthorizationHandler(UserContext userContext, ILogger<AuthorizationHandler> logger)
     {
@@ -30,17 +31,17 @@ public class AuthorizationHandler : IAuthorizationHandler
 
         if (user is null)
         {
-            Logger.LogWarning($"User with email {request.Email} was not found.");
-            return Prelude.Left<string, User>("User not found.");
+            Logger.LogError($"User with email {request.Email} was not found.");
+            return Left<string, User>("User not found.");
         }
 
         if (!user.Password.Equals(request.Password))
         {
-            Logger.LogWarning($"User {user.Email} failed to login.");
-            return Prelude.Left<string, User>("Password is incorrect.");
+            Logger.LogError($"User {user.Email} failed to login.");
+            return Left<string, User>("Password is incorrect.");
         }
 
-        return Prelude.Right<string, User>(user);
+        return Right<string, User>(user);
     }
 
     public async Task<Either<string, User>> RegisterAsync(RegisterRequest request)
@@ -49,8 +50,8 @@ public class AuthorizationHandler : IAuthorizationHandler
 
         if (user != null)
         {
-            Logger.LogWarning($"User with email {request.Email} already exists.");
-            return Prelude.Left<string, User>("User already exists.");
+            Logger.LogError($"User with email {request.Email} already exists.");
+            return Left<string, User>("User already exists.");
         }
 
         var newUser = new User()
@@ -63,6 +64,6 @@ public class AuthorizationHandler : IAuthorizationHandler
         await UserContext.Users.AddAsync(newUser);
         await UserContext.SaveChangesAsync();
 
-        return Prelude.Right<string, User>(newUser);
+        return Right<string, User>(newUser);
     }
 }

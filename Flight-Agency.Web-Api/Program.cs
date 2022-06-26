@@ -1,42 +1,18 @@
+using System.Text.Json.Serialization;
 using FlightAgency.Application.Features.Authorization.AuthorizationHandler;
 using FlightAgency.Application.Features.Trips.TripHandler;
 using FlightAgency.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services
-    .AddHttpLogging(opts =>
-    {
-        opts.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestBody;
-    });
-
-builder.Services
-    .AddCors(service => service.AddDefaultPolicy(builder => builder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader())
-    );
 
 builder.Services.AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-            var errors = context.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Aggregate((x, y) => x + " " + y);
-
-            logger.LogError($"Failed to parse request. Found the following errors: {errors}");
-
-            return new BadRequestObjectResult(context.ModelState);
-        };
-    })
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.AddDbContext<UserContext>();

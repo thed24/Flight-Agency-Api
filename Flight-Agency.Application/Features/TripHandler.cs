@@ -3,6 +3,7 @@ using FlightAgency.Infrastructure;
 using FlightAgency.Models;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace FlightAgency.Application.Features.Trips.TripHandler;
 
@@ -29,8 +30,8 @@ public class TripsHandler : ITripsHandler
 
         if (user == null)
         {
-            Logger.LogWarning($"User with id {userId} was not found.");
-            return Prelude.Left<string, User>("User not found.");
+            Logger.LogError($"User with id {userId} was not found.");
+            return Left<string, User>("User not found.");
         }
 
         var stops = createTripRequest.Stops.Select(stop => new Stop()
@@ -51,7 +52,7 @@ public class TripsHandler : ITripsHandler
         user.Trips.Add(trip);
         await UserContext.SaveChangesAsync();
 
-        return Prelude.Right<string, User>(user);
+        return Right<string, User>(user);
     }
 
     public List<Trip> GetTrips(int userId)
@@ -60,7 +61,7 @@ public class TripsHandler : ITripsHandler
 
         if (user is null)
         {
-            Logger.LogWarning($"User with id {userId} was not found.");
+            Logger.LogError($"User with id {userId} was not found.");
             return new List<Trip>();
         }
 
