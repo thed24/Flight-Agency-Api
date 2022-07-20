@@ -26,7 +26,7 @@ public class TripsHandler : ITripsHandler
 
     public async Task<Either<string, User>> CreateTrip(int userId, CreateTripRequest createTripRequest)
     {
-        var user = UserContext.Users.IncludeAllAsync().Single(user => user.Id == userId);
+        User? user = UserContext.Users.IncludeAllAsync().Single(user => user.Id == userId);
 
         if (user == null)
         {
@@ -34,7 +34,7 @@ public class TripsHandler : ITripsHandler
             return Left<string, User>("User not found.");
         }
 
-        var stops = createTripRequest.Stops.Select(stop => new Stop()
+        List<Stop> stops = createTripRequest.Stops.Select(stop => new Stop()
         {
             Name = stop.Name,
             Location = stop.Location,
@@ -43,7 +43,7 @@ public class TripsHandler : ITripsHandler
             Category = stop.Category
         }).ToList();
 
-        var trip = new Trip()
+        Trip trip = new()
         {
             Destination = createTripRequest.Destination,
             Stops = stops
@@ -57,7 +57,7 @@ public class TripsHandler : ITripsHandler
 
     public List<Trip> GetTrips(int userId)
     {
-        var user = UserContext.Users.IncludeAllAsync().FirstOrDefault(user => user.Id == userId);
+        User? user = UserContext.Users.IncludeAllAsync().FirstOrDefault(user => user.Id == userId);
 
         if (user is null)
         {

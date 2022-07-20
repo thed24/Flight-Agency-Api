@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 public class UserContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Trip> Trips { get; set; }
-    public DbSet<Stop> Stops { get; set; }
-    public DbSet<DateRange> Dates { get; set; }
-    public DbSet<Location> Locations { get; set; }
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Trip> Trips { get; set; } = null!;
+    public DbSet<Stop> Stops { get; set; } = null!;
+    public DbSet<DateRange> Dates { get; set; } = null!;
+    public DbSet<Location> Locations { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

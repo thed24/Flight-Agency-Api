@@ -14,12 +14,16 @@ public class UserController
     }
 
     [HttpPost("{userId}/trips")]
-    public async Task<IActionResult> CreateTrip([FromRoute] int userId, [FromBody] CreateTripRequest createTripRequest) =>
-        (await TripsHandler
+    public async Task<IActionResult> CreateTrip([FromRoute] int userId, [FromBody] CreateTripRequest createTripRequest)
+    {
+        return (await TripsHandler
             .CreateTrip(userId, createTripRequest))
             .MapToApiResponse<string, User>();
+    }
 
     [HttpGet("{userId}/trips")]
-    public IActionResult GetTrips([FromRoute] int userId) =>
-        new OkObjectResult(TripsHandler.GetTrips(userId));
+    public IActionResult GetTrips([FromRoute] int userId)
+    {
+        return new OkObjectResult(TripsHandler.GetTrips(userId));
+    }
 }

@@ -27,7 +27,7 @@ public class AuthorizationHandler : IAuthorizationHandler
 
     public async Task<Either<string, User>> LoginAsync(LoginRequest request)
     {
-        var user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        User? user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user is null)
         {
@@ -46,7 +46,7 @@ public class AuthorizationHandler : IAuthorizationHandler
 
     public async Task<Either<string, User>> RegisterAsync(RegisterRequest request)
     {
-        var user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        User? user = await UserContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user != null)
         {
@@ -54,7 +54,7 @@ public class AuthorizationHandler : IAuthorizationHandler
             return Left<string, User>("User already exists.");
         }
 
-        var newUser = new User()
+        User newUser = new()
         {
             Email = request.Email,
             Name = request.Name,
