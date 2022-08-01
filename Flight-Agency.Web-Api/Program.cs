@@ -15,9 +15,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-builder.Services.AddDbContext<UserContext>();
-builder.Services.AddTransient<IAuthorizationHandler, AuthorizationHandler>();
-builder.Services.AddTransient<ITripsHandler, TripsHandler>();
+builder.Services.AddDbContext<UserContext>(ServiceLifetime.Singleton);
+builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
+builder.Services.AddSingleton<ITripsHandler, TripsHandler>();
 
 var app = builder.Build();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";

@@ -1,13 +1,15 @@
 using FlightAgency.Application.Features.Trips.Requests;
 using FlightAgency.Application.Features.Trips.TripHandler;
-using FlightAgency.Models;
+using FlightAgency.WebApi.Common;
 using Microsoft.AspNetCore.Mvc;
+
+namespace FlightAgency.WebApi.Controllers;
 
 [ApiController]
 [Route("/api/users")]
 public class UserController
 {
-    public ITripsHandler TripsHandler { get; }
+    private ITripsHandler TripsHandler { get; }
     public UserController(ITripsHandler tripsHandler)
     {
         TripsHandler = tripsHandler;
@@ -18,7 +20,7 @@ public class UserController
     {
         return (await TripsHandler
             .CreateTrip(userId, createTripRequest))
-            .MapToApiResponse<string, User>();
+            .MapToApiResponse();
     }
 
     [HttpGet("{userId}/trips")]

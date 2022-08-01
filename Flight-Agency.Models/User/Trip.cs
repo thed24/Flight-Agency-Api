@@ -1,4 +1,5 @@
 ﻿namespace FlightAgency.Models;
+
 public class Trip
 {
     public int Id { get; set; }

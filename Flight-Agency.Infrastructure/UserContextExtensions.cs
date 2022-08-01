@@ -1,6 +1,8 @@
 using FlightAgency.Models;
 using Microsoft.EntityFrameworkCore;
 
+namespace FlightAgency.Infrastructure;
+
 public static class UserContextExtensions
 {
     public static IQueryable<User> IncludeAllAsync(this DbSet<User> users) => users
