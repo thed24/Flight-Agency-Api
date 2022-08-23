@@ -3,6 +3,7 @@ using System;
 using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlightAgency.Infrastructure.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20220823101956_08-23-2022")]
+    partial class _08232022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,9 +50,14 @@ namespace FlightAgency.Infrastructure.Migrations
                     b.Property<int?>("TripId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("TripId1")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TripId");
+
+                    b.HasIndex("TripId1");
 
                     b.ToTable("Stops");
                 });
@@ -104,8 +112,12 @@ namespace FlightAgency.Infrastructure.Migrations
             modelBuilder.Entity("FlightAgency.Models.Stop", b =>
                 {
                     b.HasOne("FlightAgency.Models.Trip", null)
-                        .WithMany("Stops")
+                        .WithMany("SortedStops")
                         .HasForeignKey("TripId");
+
+                    b.HasOne("FlightAgency.Models.Trip", null)
+                        .WithMany("Stops")
+                        .HasForeignKey("TripId1");
 
                     b.OwnsOne("FlightAgency.Models.DateRange", "Time", b1 =>
                         {
@@ -167,6 +179,8 @@ namespace FlightAgency.Infrastructure.Migrations
 
             modelBuilder.Entity("FlightAgency.Models.Trip", b =>
                 {
+                    b.Navigation("SortedStops");
+
                     b.Navigation("Stops");
                 });
 
