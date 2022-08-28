@@ -47,12 +47,17 @@ public class CalendarHandler : ICalendarHandler
         }
 
         Calendar calendar = new();
-        calendar.Events.Add(new()
+        trip.Stops.ForEach(s =>
         {
-            Start = new CalDateTime(trip.FirstStop.Time.Start),
-            End = new CalDateTime(trip.LastStop.Time.End),
-            GeographicLocation = new(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude),
-            Summary = $"Trip to {trip.Destination} for {trip.Length} days",
+            calendar.Events.Add(new()
+            {
+                Start = new CalDateTime(s.Time.Start),
+                End = new CalDateTime(s.Time.End),
+                Summary = s.Name,
+                Categories = new [] { s.Category.ToString() },
+                LastModified = new CalDateTime(DateTime.Now),
+                GeographicLocation = new(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude),
+            });
         });
 
         CalendarSerializer serializer = new();
