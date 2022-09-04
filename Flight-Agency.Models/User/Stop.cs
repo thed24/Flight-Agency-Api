@@ -1,4 +1,6 @@
-namespace FlightAgency.Models;
+using FlightAgency.Models.User.ValueObjects;
+
+namespace FlightAgency.Models.User;
 
 public class Stop
 {

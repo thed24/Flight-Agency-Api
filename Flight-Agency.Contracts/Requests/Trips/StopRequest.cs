@@ -1,5 +1,6 @@
-using FlightAgency.Models;
+using FlightAgency.Models.User;
+using FlightAgency.Models.User.ValueObjects;
 
-namespace FlightAgency.Application.Features.Trips.Requests;
+namespace FlightAgency.Contracts.Requests.Trips;
 
 public record StopRequest(string Name, Location Location, DateRange Time, string Address, Category Category);

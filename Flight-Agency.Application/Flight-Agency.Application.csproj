@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>FlightAgency.Application</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>FlightAgency.Application</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Flight-Agency.Contracts\Flight-Agency.Contracts.csproj" />
-    <ProjectReference Include="..\Flight-Agency.Models\Flight-Agency.Models.csproj" />
-    <ProjectReference Include="..\Flight-Agency.Infrastructure\Flight-Agency.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Flight-Agency.Contracts\Flight-Agency.Contracts.csproj"/>
+        <ProjectReference Include="..\Flight-Agency.Models\Flight-Agency.Models.csproj"/>
+        <ProjectReference Include="..\Flight-Agency.Infrastructure\Flight-Agency.Infrastructure.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Ical.Net" Version="4.2.0" />
-    <PackageReference Include="LanguageExt.Core" Version="4.0.4" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Ical.Net" Version="4.2.0"/>
+        <PackageReference Include="LanguageExt.Core" Version="4.0.4"/>
+    </ItemGroup>
 
 </Project>

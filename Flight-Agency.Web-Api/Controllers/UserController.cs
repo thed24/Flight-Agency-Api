@@ -1,9 +1,9 @@
-using FlightAgency.Application.Features.Trips.Requests;
-using FlightAgency.Application.Features.Trips.TripHandler;
-using FlightAgency.Application.Features.CalendarHandler;
+using System.Net.Mime;
+using FlightAgency.Application;
+using FlightAgency.Contracts.Requests.Calendar;
+using FlightAgency.Contracts.Requests.Trips;
 using FlightAgency.WebApi.Common;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mime;
 
 namespace FlightAgency.WebApi.Controllers;
 
@@ -11,20 +11,20 @@ namespace FlightAgency.WebApi.Controllers;
 [Route("/api/users")]
 public class UserController : Controller
 {
-    private ITripsHandler TripsHandler { get; }
-    private ICalendarHandler CalendarHandler { get; }
-
     public UserController(ITripsHandler tripsHandler, ICalendarHandler calendarHandler)
     {
         TripsHandler = tripsHandler;
         CalendarHandler = calendarHandler;
     }
 
+    private ITripsHandler TripsHandler { get; }
+    private ICalendarHandler CalendarHandler { get; }
+
     [HttpPost("{userId}/trips")]
     public async Task<IActionResult> CreateTrip([FromRoute] int userId, [FromBody] CreateTripRequest createTripRequest)
     {
         return (await TripsHandler
-            .CreateTrip(userId, createTripRequest))
+                .CreateTrip(userId, createTripRequest))
             .MapToApiResponse();
     }
 
@@ -40,13 +40,13 @@ public class UserController : Controller
         ContentDisposition cd = new()
         {
             FileName = $"trip{tripId}.ical",
-            Inline = false,
+            Inline = false
         };
 
         Response.Headers.Add("Content-Disposition", cd.ToString());
 
-        return (await CalendarHandler.CreatIcal(new(userId, tripId))).Match<IActionResult>(
-            Left: (error) => new BadRequestObjectResult(error),
-            Right: (result) => File(result, "application/force-download"));
+        return (await CalendarHandler.CreatIcal(new CreateIcalRequest(userId, tripId))).Match<IActionResult>(
+            Left: error => new BadRequestObjectResult(error),
+            Right: result => File(result, "application/force-download"));
     }
 }

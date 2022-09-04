@@ -1,10 +1,8 @@
 using System.Text.Json.Serialization;
-using FlightAgency.Application.Features.Authorization.AuthorizationHandler;
-using FlightAgency.Application.Features.CalendarHandler;
-using FlightAgency.Application.Features.Trips.TripHandler;
+using FlightAgency.Application;
 using FlightAgency.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -21,8 +19,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-var app = builder.Build();
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+WebApplication app = builder.Build();
+string port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://+:{port}");
 
 if (app.Environment.IsDevelopment())

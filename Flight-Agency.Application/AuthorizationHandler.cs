@@ -1,12 +1,12 @@
 ﻿using FlightAgency.Contracts.Requests.Authorization;
 using FlightAgency.Infrastructure;
-using FlightAgency.Models;
+using FlightAgency.Models.User;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace FlightAgency.Application.Features.Authorization.AuthorizationHandler;
+namespace FlightAgency.Application;
 
 public interface IAuthorizationHandler
 {
@@ -16,8 +16,8 @@ public interface IAuthorizationHandler
 
 public class AuthorizationHandler : IAuthorizationHandler
 {
-    private readonly UserContext UserContext;
     private readonly ILogger Logger;
+    private readonly UserContext UserContext;
 
     public AuthorizationHandler(UserContext userContext, ILogger<AuthorizationHandler> logger)
     {

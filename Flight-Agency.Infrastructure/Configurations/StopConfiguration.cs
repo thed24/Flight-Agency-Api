@@ -1,6 +1,8 @@
-using FlightAgency.Models;
+using FlightAgency.Models.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace FlightAgency.Infrastructure.Configurations;
 
 public class StopConfiguration : IEntityTypeConfiguration<Stop>
 {
@@ -10,10 +12,10 @@ public class StopConfiguration : IEntityTypeConfiguration<Stop>
         builder.OwnsOne(s => s.Time);
         builder.OwnsOne(s => s.Location);
         builder.Property(s => s.Name)
-                .IsRequired();
+            .IsRequired();
         builder.Property(s => s.Address)
-                .IsRequired();
+            .IsRequired();
         builder.Property(s => s.Category)
-                .IsRequired();
+            .IsRequired();
     }
 }

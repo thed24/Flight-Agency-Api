@@ -1,8 +1,9 @@
 using System.Text;
 using FlightAgency.Contracts.Requests.Calendar;
 using FlightAgency.Infrastructure;
-using FlightAgency.Models;
+using FlightAgency.Models.User;
 using Ical.Net;
+using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using LanguageExt;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace FlightAgency.Application.Features.CalendarHandler;
+namespace FlightAgency.Application;
 
 public interface ICalendarHandler
 {
@@ -19,8 +20,8 @@ public interface ICalendarHandler
 
 public class CalendarHandler : ICalendarHandler
 {
-    private readonly UserContext UserContext;
     private readonly ILogger Logger;
+    private readonly UserContext UserContext;
 
     public CalendarHandler(UserContext userContext, ILogger<CalendarHandler> logger)
     {
@@ -49,14 +50,15 @@ public class CalendarHandler : ICalendarHandler
         Calendar calendar = new();
         trip.Stops.ForEach(s =>
         {
-            calendar.Events.Add(new()
+            calendar.Events.Add(new CalendarEvent
             {
                 Start = new CalDateTime(s.Time.Start),
                 End = new CalDateTime(s.Time.End),
                 Summary = s.Name,
-                Categories = new [] { s.Category.ToString() },
+                Categories = new[] { s.Category.ToString() },
                 LastModified = new CalDateTime(DateTime.Now),
-                GeographicLocation = new(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude),
+                GeographicLocation =
+                    new GeographicLocation(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude)
             });
         });
 

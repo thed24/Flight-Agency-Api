@@ -1,8 +1,10 @@
-namespace FlightAgency.Infrastructure;
-
 using System.Reflection;
 using FlightAgency.Models;
+using FlightAgency.Models.User;
+using FlightAgency.Models.User.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+
+namespace FlightAgency.Infrastructure;
 
 public class UserContext : DbContext
 {
@@ -14,12 +16,12 @@ public class UserContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var database = Environment.GetEnvironmentVariable("DB_NAME");
-        var user = Environment.GetEnvironmentVariable("DB_USER");
-        var password = Environment.GetEnvironmentVariable("DB_PASS");
-        var host = Environment.GetEnvironmentVariable("DB_HOST");
+        string? database = Environment.GetEnvironmentVariable("DB_NAME");
+        string? user = Environment.GetEnvironmentVariable("DB_USER");
+        string? password = Environment.GetEnvironmentVariable("DB_PASS");
+        string? host = Environment.GetEnvironmentVariable("DB_HOST");
 
-        var connectionString = $"Host={host};Username={user};Password={password};Database={database}";
+        string connectionString = $"Host={host};Username={user};Password={password};Database={database}";
         optionsBuilder.UseNpgsql(connectionString);
     }
 

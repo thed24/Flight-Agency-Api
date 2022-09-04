@@ -1,11 +1,11 @@
-﻿using FlightAgency.Application.Features.Trips.Requests;
+﻿using FlightAgency.Contracts.Requests.Trips;
 using FlightAgency.Infrastructure;
-using FlightAgency.Models;
+using FlightAgency.Models.User;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace FlightAgency.Application.Features.Trips.TripHandler;
+namespace FlightAgency.Application;
 
 public interface ITripsHandler
 {
@@ -15,8 +15,8 @@ public interface ITripsHandler
 
 public class TripsHandler : ITripsHandler
 {
-    private readonly UserContext UserContext;
     private readonly ILogger<TripsHandler> Logger;
+    private readonly UserContext UserContext;
 
     public TripsHandler(UserContext userContext, ILogger<TripsHandler> logger)
     {
@@ -28,13 +28,13 @@ public class TripsHandler : ITripsHandler
     {
         User? user = UserContext.Users.IncludeAllAsync().Single(user => user.Id == userId);
 
-        if (user == null)
+        if (user is null)
         {
             Logger.LogError($"User with id {userId} was not found.");
             return Left<string, User>("User not found.");
         }
 
-        List<Stop> stops = createTripRequest.Stops.Select(stop => new Stop()
+        List<Stop> stops = createTripRequest.Stops.Select(stop => new Stop
         {
             Name = stop.Name,
             Location = stop.Location,

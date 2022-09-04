@@ -1,4 +1,4 @@
-﻿namespace FlightAgency.Models;
+﻿namespace FlightAgency.Models.User;
 
 public class User
 {

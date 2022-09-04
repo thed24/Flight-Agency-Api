@@ -1,4 +1,4 @@
-namespace FlightAgency.Models;
+namespace FlightAgency.Models.User;
 
 public enum Category
 {
@@ -14,5 +14,5 @@ public enum Category
     Museums,
     Parks,
     Theatre,
-    Art,
+    Art
 }

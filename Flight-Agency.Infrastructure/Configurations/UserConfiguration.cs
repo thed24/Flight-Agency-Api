@@ -1,6 +1,8 @@
-using FlightAgency.Models;
+using FlightAgency.Models.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace FlightAgency.Infrastructure.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
@@ -8,12 +10,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.Id);
         builder.HasMany(u => u.Trips)
-                .WithOne();
+            .WithOne();
         builder.Property(u => u.Name)
-                .IsRequired();
+            .IsRequired();
         builder.Property(u => u.Email)
-                .IsRequired();
+            .IsRequired();
         builder.Property(u => u.Password)
-                .IsRequired();
+            .IsRequired();
     }
 }
