@@ -7,16 +7,17 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-builder.Services.AddDbContext<UserContext>(ServiceLifetime.Singleton);
-builder.Services.AddSingleton<ICalendarHandler, CalendarHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
-builder.Services.AddSingleton<ITripsHandler, TripsHandler>();
+builder.Services.AddDbContext<UserContext>(ServiceLifetime.Scoped);
+builder.Services.AddScoped<ICalendarHandler, CalendarHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, AuthorizationHandler>();
+builder.Services.AddScoped<ITripsHandler, TripsHandler>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 WebApplication app = builder.Build();
@@ -32,5 +33,4 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseHttpLogging();
-
 app.Run();

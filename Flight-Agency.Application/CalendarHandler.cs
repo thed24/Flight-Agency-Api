@@ -32,7 +32,6 @@ public class CalendarHandler : ICalendarHandler
     public async Task<Either<string, Stream>> CreatIcal(CreateIcalRequest request)
     {
         User? user = await UserContext.Users.IncludeAllAsync().FirstOrDefaultAsync(u => u.Id == request.UserId);
-
         if (user is null)
         {
             Logger.LogError($"User with id {request.UserId} was not found.");
@@ -40,7 +39,6 @@ public class CalendarHandler : ICalendarHandler
         }
 
         Trip? trip = user.Trips.FirstOrDefault(t => t.Id == request.TripId);
-
         if (trip is null || trip.FirstStop is null || trip.LastStop is null)
         {
             Logger.LogError($"Trip with id {request.TripId} was empty not found.");
@@ -57,8 +55,7 @@ public class CalendarHandler : ICalendarHandler
                 Summary = s.Name,
                 Categories = new[] { s.Category.ToString() },
                 LastModified = new CalDateTime(DateTime.Now),
-                GeographicLocation =
-                    new GeographicLocation(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude)
+                GeographicLocation = new GeographicLocation(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude)
             });
         });
 
