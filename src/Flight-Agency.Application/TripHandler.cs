@@ -43,6 +43,12 @@ public class TripsHandler : ITripsHandler
             Category = stop.Category
         }).ToList();
 
+        DateTime firstDate = stops.Min(stop => stop.Time.Start);
+        foreach (Stop stop in stops)
+        {
+            stop.Day = stop.Time.Start.Subtract(firstDate).Days + 1;
+        }
+
         Trip trip = new()
         {
             Destination = createTripRequest.Destination,

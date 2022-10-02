@@ -55,7 +55,8 @@ public class CalendarHandler : ICalendarHandler
                 Summary = s.Name,
                 Categories = new[] { s.Category.ToString() },
                 LastModified = new CalDateTime(DateTime.Now),
-                GeographicLocation = new GeographicLocation(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude)
+                GeographicLocation = new GeographicLocation(trip.FirstStop.Location.Latitude, trip.FirstStop.Location.Longitude),
+                Location = s.Address,
             });
         });
 

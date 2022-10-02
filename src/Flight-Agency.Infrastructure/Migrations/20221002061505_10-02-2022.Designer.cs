@@ -3,6 +3,7 @@ using System;
 using FlightAgency.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlightAgency.Infrastructure.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20221002061505_10-02-2022")]
+    partial class _10022022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,14 +117,14 @@ namespace FlightAgency.Infrastructure.Migrations
 
                             b1.Property<DateTime>("End")
                                 .HasColumnType("timestamp with time zone")
-                                .HasColumnName("End");
+                                .HasColumnName("EndTime");
 
                             b1.Property<int>("Id")
                                 .HasColumnType("integer");
 
                             b1.Property<DateTime>("Start")
                                 .HasColumnType("timestamp with time zone")
-                                .HasColumnName("Start");
+                                .HasColumnName("StartTime");
 
                             b1.HasKey("StopId");
 
