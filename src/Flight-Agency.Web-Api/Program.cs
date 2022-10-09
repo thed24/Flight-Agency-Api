@@ -24,11 +24,6 @@ WebApplication app = builder.Build();
 string port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://+:{port}");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
 app.UseCors();
 app.UseHttpsRedirection();
 app.MapControllers();
