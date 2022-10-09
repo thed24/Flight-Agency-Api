@@ -40,7 +40,7 @@ options:
   substitutionOption: ALLOW_LOOSE
 substitutions:
   _TRIGGER_ID: 72cee353-2dca-4656-968d-d2bf67636c74
-  _DEPLOY_REGION: asia-southeast2
+  _DEPLOY_REGION: asia-southeast1
   _GCR_HOSTNAME: asia.gcr.io
   _PLATFORM: managed
   _SERVICE_NAME: flight-agency-api
