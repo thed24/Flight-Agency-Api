@@ -43,8 +43,8 @@ steps:
       - add-iam-policy-binding
       - $_SERVICE_NAME
       - --region=$_DEPLOY_REGION
-      - --member='allUsers'
-      - --role='roles/run.invoker'
+      - --member=allUsers
+      - --role=roles/run.invoker
 images:
   - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
 options:
