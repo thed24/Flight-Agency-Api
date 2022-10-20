@@ -20,7 +20,7 @@ public class AuthorizationController
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
         return (await AuthorizationHandler
-                .LoginAsync(loginRequest))
+            .LoginAsync(loginRequest))
             .MapToApiResponse();
     }
 
@@ -28,7 +28,7 @@ public class AuthorizationController
     public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
     {
         return (await AuthorizationHandler
-                .RegisterAsync(registerRequest))
+            .RegisterAsync(registerRequest))
             .MapToApiResponse();
     }
 }

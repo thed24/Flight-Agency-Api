@@ -24,7 +24,7 @@ public class UserController : Controller
     public async Task<IActionResult> CreateTrip([FromRoute] int userId, [FromBody] CreateTripRequest createTripRequest)
     {
         return (await TripsHandler
-                .CreateTrip(userId, createTripRequest))
+            .CreateTrip(userId, createTripRequest))
             .MapToApiResponse();
     }
 
