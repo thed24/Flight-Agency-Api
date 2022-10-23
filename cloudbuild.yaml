@@ -27,10 +27,10 @@ steps:
       - >-
         --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS
       - "--region=$_DEPLOY_REGION"
-      - --update-secrets=DB_USER=db_username:latest
-      - --update-secrets=DB_PASS=db_pass:latest
-      - --update-secrets=DB_NAME=db_name:latest
-      - --update-secrets=DB_HOST=db_host:latest
+      - --update-secrets=DatabaseSettings__Username=db_username:latest
+      - --update-secrets=DatabaseSettings__Password=db_pass:latest
+      - --update-secrets=DatabaseSettings__DatabaseName=db_name:latest
+      - --update-secrets=DatabaseSettings__Host=db_host:latest
       - "--quiet"
     id: Deploy
     entrypoint: gcloud

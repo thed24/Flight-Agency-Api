@@ -3,6 +3,7 @@ using FlightAgency.Models;
 using FlightAgency.Models.User;
 using FlightAgency.Models.User.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FlightAgency.Infrastructure;
 
@@ -13,15 +14,17 @@ public class UserContext : DbContext
     public DbSet<Stop> Stops { get; set; } = null!;
     public DbSet<DateRange> Dates { get; set; } = null!;
     public DbSet<Location> Locations { get; set; } = null!;
+    private readonly IOptionsMonitor<DatabaseSettings> _settings;
+
+    public UserContext(IOptionsMonitor<DatabaseSettings> settings)
+    {
+        _settings = settings;
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string? database = Environment.GetEnvironmentVariable("DB_NAME");
-        string? user = Environment.GetEnvironmentVariable("DB_USER");
-        string? password = Environment.GetEnvironmentVariable("DB_PASS");
-        string? host = Environment.GetEnvironmentVariable("DB_HOST");
-
-        string connectionString = $"Host={host};Username={user};Password={password};Database={database}";
+        var settings = _settings.CurrentValue;
+        string connectionString = $"Host={settings.Host};Username={settings.Username};Password={settings.Password};Database={settings.DatabaseName}";
         optionsBuilder.UseNpgsql(connectionString);
     }
 

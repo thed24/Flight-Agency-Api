@@ -1,4 +1,5 @@
 using FlightAgency.Contracts.Responses;
+using FlightAgency.Models.User;
 using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
 

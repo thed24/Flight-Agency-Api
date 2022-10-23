@@ -4,6 +4,8 @@ using FlightAgency.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 

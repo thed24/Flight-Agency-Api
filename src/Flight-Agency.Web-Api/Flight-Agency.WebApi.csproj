@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="4.0.8-beta"/>
+        <PackageReference Include="LanguageExt.Core" Version="4.0.8-beta" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Flight-Agency.Application\Flight-Agency.Application.csproj"/>
-        <ProjectReference Include="..\Flight-Agency.Models\Flight-Agency.Models.csproj"/>
+        <ProjectReference Include="..\Flight-Agency.Application\Flight-Agency.Application.csproj" />
+        <ProjectReference Include="..\Flight-Agency.Models\Flight-Agency.Models.csproj" />
     </ItemGroup>
 
 </Project>
