@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlightAgency.WebApi.Controllers;
 
 [ApiController]
-[Route("/api/auth")]
+[Route("/api/authorization")]
 public class AuthorizationController
 {
     public AuthorizationController(IAuthorizationHandler authorizationHandler)
